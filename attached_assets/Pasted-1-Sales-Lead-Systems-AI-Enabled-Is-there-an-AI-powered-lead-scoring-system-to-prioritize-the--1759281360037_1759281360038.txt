@@ -1,0 +1,67 @@
+1. Sales & Lead Systems (AI-Enabled)
+
+ Is there an AI-powered lead scoring system to prioritize the best prospects?
+
+ Are leads automatically tracked in a CRM with AI suggestions for next steps?
+
+ Is outreach supported by AI-driven personalization (emails, LinkedIn, SMS)?
+
+ Are sales calls recorded and AI-analyzed for objections, talk ratio, and close signals?
+
+ Do contracts/proposals auto-generate and route with AI-assisted templates + e-sign?
+
+2. Marketing Systems (Tech-Enabled)
+
+ Is content (blogs, social posts, email) AI-assisted for ideation, drafting, and repurposing?
+
+ Are campaigns tracked in real-time dashboards with predictive analytics?
+
+ Do we have AI-powered chatbots for lead nurturing and FAQs?
+
+ Are retargeting and remarketing automated across channels (ads, email, SMS)?
+
+ Can we measure ROI per channel automatically without manual reporting?
+
+3. Product/Service Delivery Systems (AI in Ops)
+
+ Is client onboarding automated with AI-driven workflows (welcome sequences, setup guides)?
+
+ Are client requests tracked in AI-enhanced ticketing/project systems (like ClickUp/Jira with automation)?
+
+ Do we use AI for quality control (spotting errors, summarizing feedback, auto-checking deliverables)?
+
+ Are progress updates automatically generated (dashboards, AI-written reports)?
+
+ Are there self-service portals where clients can access status and resources anytime?
+
+4. Finance Systems (AI-Powered)
+
+ Do we use AI-driven forecasting models for cash flow, revenue, and churn?
+
+ Are invoices/payments auto-generated and reconciled with minimal human touch?
+
+ Can AI flag anomalies (suspicious expenses, missed payments)?
+
+ Is financial data accessible in real-time dashboards instead of static spreadsheets?
+
+5. People & Management Systems (Tech-Enabled Teams)
+
+ Do team members have AI-assisted productivity tools (task management, meeting summaries)?
+
+ Are roles and KPIs tracked in a scorecard system with real-time updates?
+
+ Are AI-driven hiring tools used to screen candidates and predict fit?
+
+ Is onboarding/training automated with digital SOPs, AI-driven learning modules, and video guides?
+
+ Do managers use AI to track performance signals (engagement, output, response times)?
+
+6. Data, Tech & Infrastructure
+
+ Are all systems integrated via APIs/automation platforms (no double entry)?
+
+ Do we use AI for data cleaning and normalization across tools?
+
+ Is data security/backup automated (compliance-ready)?
+
+ Are there predictive dashboards highlighting issues before they become bottlenecks?

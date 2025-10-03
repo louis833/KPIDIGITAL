@@ -1,0 +1,104 @@
+Project: Design and build a modern website for KPI Digital
+
+Brand: Use the attached KPI Digital logo to extract the color palette and typography style. Keep the design minimal, professional, and bold.
+
+Objective:
+Create a high-converting website that positions KPI Digital as the go-to partner for trades businesses (electricians, solar, HVAC) wanting clarity, systems, and growth. The site should clearly communicate the problems trades face, KPI Digital’s solution, and a clear path to engage.
+
+Content & Structure
+
+1. Hero Section
+
+Headline: “Clarity. Systems. Growth.”
+
+Sub-headline: “Helping trades businesses move from reactive chaos to predictable, profitable growth.”
+
+CTA Button: “Book a Strategy Call”
+
+Background: clean design, subtle brand colors from logo.
+
+2. Pain Points Section
+
+Showcase common struggles:
+
+No systems or automation
+
+Reacting instead of planning
+
+No sales process
+
+Undercharging for jobs
+
+No clarity on numbers
+
+3. Solution Section
+
+Introduce KPI Digital’s Digital Foundations service:
+
+Done-for-you systems for automation & monitoring
+
+Growth planning for high-value projects
+
+Real-time clarity dashboards
+
+4. Features / Value Section
+
+Visual cards highlighting:
+
+Ideal Client Blueprint
+
+Pricing & Profit Audit
+
+Sales System setup
+
+Control Dashboard
+
+Referral Maximizer Toolkit
+
+5. Process Section
+
+3-step visual flow:
+
+Assess → Audit & Strategy
+
+Build → Systems & Foundations
+
+Grow → Focus on high-ticket projects
+
+6. Social Proof Section
+
+Placeholder for testimonials, logos, or case studies.
+
+7. CTA Section
+
+Reiterate: “Take control of your business. Plan for growth.”
+
+Button: “Get Started Today”
+
+8. Footer
+
+Navigation links
+
+Contact info
+
+Social links
+
+Design Guidelines
+
+Use KPI Digital logo colors as the base palette.
+
+Bold typography, modern and minimal layout.
+
+Responsive design for desktop, tablet, and mobile.
+
+Clean grid-based sections with whitespace for clarity.
+
+Deliverables
+
+Full responsive website design (React or Next.js).
+
+Tailwind CSS for styling.
+
+Modular, reusable components.
+
+Placeholder assets for testimonials, case studies, and dashboards.

@@ -1,0 +1,91 @@
+Objective
+Design and deliver an award-winning, modern, interactive website for KPI Digital, targeting trades businesses (plumbing, electrical, HVAC, carpentry). The site must combine cutting-edge aesthetics, micro-interactions, and storytelling with a rock-solid conversion flow, trust signals, and performance.
+
+Creative Direction
+
+Bold, modern visual language that resonates with blue-collar credibility and digital innovation.
+
+Advanced motion design (scroll triggers, animated reveals, hover/touch interactions) that feel intentional and premium—not gimmicky.
+
+Clear conversion paths: calls, quote requests, and bookings should be visually irresistible.
+
+Social proof, trust badges, and testimonials woven naturally into the flow.
+
+Accessibility and performance must be treated as design features, not afterthoughts.
+
+Experience Design Priorities
+
+Immersive hero with animated headline and interactive CTA.
+
+Pain points → solution storytelling using staggered animations, counters, and parallax.
+
+Value proposition cards with flip/micro-interactions that delight.
+
+3-step process flow animated with progress indicators.
+
+Testimonial carousel with smooth transitions and review schema.
+
+Sticky navigation that adapts with scroll (color, visibility).
+
+Responsive touch-first experience with swipe/gesture support.
+
+Interactive footer with animated icons and secondary CTAs.
+
+Conversion & Business Essentials
+
+Smart, frictionless quote/booking form with conditional fields and file uploads.
+
+Conversion-focused copywriting and service taxonomy.
+
+Display of licences, certifications, and guarantees.
+
+Integration pathways for CRM, scheduling, and payments.
+
+Performance, SEO & Accessibility
+
+Target Core Web Vitals: LCP ≤2.5s, INP ≤200ms, CLS ≤0.1.
+
+WCAG 2.2 AA compliance: motion preferences respected, keyboard navigability, contrast.
+
+Structured data: LocalBusiness, Service, Review, FAQ.
+
+Optimised assets: responsive images, AVIF/WebP, lazy-loading.
+
+Mood & Inspiration
+Think:
+
+Digital craft at the level of Apple product pages (motion, polish).
+
+Trust-building authenticity like high-end trade services (photography, team presence).
+
+Energy and dynamism of startup launch sites.
+
+Deliverables
+
+Full design system (components, states, animation guidelines).
+
+Responsive layouts across breakpoints (mobile-first).
+
+Interaction and motion specs (scroll, hover, reduced-motion states).
+
+Accessibility annotations.
+
+Assets prepared for handoff to a Next.js/Tailwind/Framer Motion build.
+
+Tone of Voice & Brand Feel
+
+Confident, approachable, and practical.
+
+Professional yet grounded in the realities of trades.
+
+Messaging that balances modern digital solutions with hands-on trust.
+
+Success Criteria
+
+Design that stands out for creativity and usability.
+
+Drives measurable conversions (quotes, calls, bookings).
+
+Wins trust instantly with credibility signals.
+
+Eligible for industry recognition (Awwwards, CSS Design Awards, etc.).
