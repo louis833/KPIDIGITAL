@@ -1,0 +1,83 @@
+1. Scaling Acquisition
+
+ Identify the highest ROI acquisition channel and double down.
+
+ Increase paid acquisition spend while monitoring CAC vs. LTV.
+
+ Continuously test new channels (ads, outbound, partnerships, referrals).
+
+ Automate lead nurturing with AI/tech-enabled systems.
+
+2. Improving Conversions
+
+ Track and optimize each step: lead → show → close → upsell.
+
+ Use A/B testing for funnels, offers, and messaging.
+
+ Build structured upsell, downsell, cross-sell flows.
+
+ Review conversion data weekly for fast adjustments.
+
+3. Increasing Lifetime Value
+
+ Implement recurring revenue streams (subscriptions, retainers, memberships).
+
+ Build a customer success system to reduce churn.
+
+ Add premium/expanded offers for existing clients.
+
+ Launch a referral program to turn clients into advocates.
+
+4. Expanding Delivery Capacity
+
+ Create delivery playbooks and SOPs for scale.
+
+ Automate and outsource low-value tasks to preserve margins.
+
+ Hire in advance of demand spikes to avoid bottlenecks.
+
+ Use AI dashboards for quality control and workload monitoring.
+
+5. Protecting Margins
+
+ Track profit per product/service (unit economics).
+
+ Cut or redesign low-margin offers.
+
+ Test and raise prices while monitoring close rate.
+
+ Ensure expenses grow slower than revenue (operating leverage).
+
+6. Talent Acquisition (People as Leverage)
+
+ Build a repeatable hiring funnel (attract, assess, onboard).
+
+ Use scorecards for every role with clear KPIs.
+
+ Automate onboarding & training with AI-driven learning modules.
+
+ Hire for specialists who unlock growth (sales closers, marketers, operators).
+
+ Continuously upgrade the talent pool — A-players only.
+
+7. Money Model (Scaling the Cash Engine)
+
+ Define the core money model: how $1 in acquisition turns into $X in revenue.
+
+ Monitor CAC vs. LTV ratio (aim for 3:1+).
+
+ Build cash flow predictability: upfront payments, recurring billing, financing options.
+
+ Use tiered pricing & packaging to capture more value per client.
+
+ Model out scenarios for scaling (what happens at 2x, 5x, 10x revenue).
+
+8. Scaling Leadership & Vision
+
+ Leadership focuses on strategy, not operations.
+
+ Weekly scorecards/dashboards show growth metrics at a glance.
+
+ Culture is tied to performance and accountability.
+
+ Growth roadmap includes new markets, verticals, or acquisitions.

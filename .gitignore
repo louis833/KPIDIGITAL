@@ -1,0 +1,25 @@
+# Environment files (SECRETS - never commit!)
+.env
+.env.local
+.env.cloudrun
+
+
+# Dependencies
+node_modules/
+
+# Build output
+.next/
+out/
+build/
+dist/
+
+# Mac
+.DS_Store
+
+# IDE
+.replit
+.local/
+.tmp/
+
+# Logs
+npm-debug.log*
