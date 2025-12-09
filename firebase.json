@@ -10,7 +10,7 @@
             {
                 "source": "**",
                 "run": {
-                    "serviceId": "kpidigital-v3",
+                    "serviceId": "kpi-digital-website",
                     "region": "us-central1"
                 }
             }
