@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Phone, MessageSquare, Facebook, MapPin, Smartphone } from "lucide-react";
+import { Phone, MessageSquare, Facebook, MapPin, Smartphone, LayoutDashboard } from "lucide-react";
 
 export default function SolutionSection() {
   const features = [
@@ -27,6 +27,11 @@ export default function SolutionSection() {
       icon: Smartphone,
       title: "SMS Enquiries",
       description: "Text messages answered and qualified, just like phone calls.",
+    },
+    {
+      icon: LayoutDashboard,
+      title: "Director Mode",
+      description: "End of day snapshot of all the key workings of the business. See exactly what happened without getting bogged down in the details.",
     },
   ];
 

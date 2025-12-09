@@ -14,6 +14,7 @@ import ScrollIndicator from "@/components/ScrollIndicator";
 import ChatWidget from "@/components/ChatWidget";
 import ControlSection from "@/components/ControlSection";
 import PricingSection from "@/components/PricingSection";
+import MobileStickyCTA from "@/components/MobileStickyCTA";
 
 export default function Home() {
   const scrollToBookingForm = () => {
@@ -53,6 +54,7 @@ export default function Home() {
         <Footer onCTAClick={scrollToBookingForm} />
         <ScrollIndicator />
         <ChatWidget />
+        <MobileStickyCTA onCTAClick={scrollToBookingForm} />
       </div>
     </>
   );

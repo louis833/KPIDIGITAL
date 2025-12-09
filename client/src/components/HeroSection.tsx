@@ -73,7 +73,7 @@ export default function HeroSection({ onCTAClick }: HeroSectionProps) {
           {/* Main headline with staggered animation */}
           <motion.h1
             variants={itemVariants}
-            className="text-6xl md:text-8xl lg:text-9xl font-extrabold text-foreground mb-8 tracking-tight leading-none"
+            className="text-4xl md:text-8xl lg:text-9xl font-extrabold text-foreground mb-8 tracking-tight leading-none"
           >
             <motion.span
               className="block"
@@ -88,7 +88,7 @@ export default function HeroSection({ onCTAClick }: HeroSectionProps) {
           {/* Subtitle */}
           <motion.p
             variants={itemVariants}
-            className="text-2xl md:text-3xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed font-medium"
+            className="text-xl md:text-3xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed font-medium"
           >
             Your <span className="text-primary font-bold">AI Executive Assistant</span> answers every call, books jobs, and filters time-wasters — so you can focus on the work.
           </motion.p>
@@ -100,7 +100,7 @@ export default function HeroSection({ onCTAClick }: HeroSectionProps) {
           >
             <Button
               size="lg"
-              className="px-12 py-8 text-2xl font-bold hover-elevate active-elevate-2 group transition-all duration-300 shadow-xl shadow-primary/20"
+              className="px-8 py-6 text-xl md:px-12 md:py-8 md:text-2xl font-bold hover-elevate active-elevate-2 group transition-all duration-300 shadow-xl shadow-primary/20"
               onClick={handleCTAClick}
               data-testid="button-book-call"
             >
@@ -115,7 +115,8 @@ export default function HeroSection({ onCTAClick }: HeroSectionProps) {
             className="text-sm text-muted-foreground font-medium"
           >
             <p className="mb-2">From just <span className="text-primary font-bold">$50/day</span> · Free setup</p>
-            <p>Built by sparkies, for sparkies</p>
+            <p className="text-lg font-semibold text-foreground">Built by People Who Get It</p>
+            <p className="text-sm text-muted-foreground mt-1">Trade experience. Not tech hype.</p>
           </motion.div>
         </motion.div>
       </div>

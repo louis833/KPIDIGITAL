@@ -12,7 +12,7 @@ export default function PricingSection({ onCTAClick }: PricingSectionProps) {
         "Every message responded to",
         "Every lead qualified",
         "Every tyre-kicker filtered",
-        "Setup included free ($4,397 value)",
+        "Setup included free ($11,001 value)",
         "Cancel anytime",
     ];
 

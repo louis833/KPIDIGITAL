@@ -6,29 +6,79 @@ export default function OfferStackSection() {
     const stackItems = [
         {
             title: "Professional Website Build",
-            value: "$2,500",
-            description: "Mobile-optimised, high-converting design."
+            value: "$3,040",
+            description: "A fully custom-built website that is optimised for mobile devices, ensuring it loads quickly and looks great on smartphones and tablets, with a high-converting design focused on turning visitors into customers through intuitive navigation, compelling calls-to-action, and tailored layouts for electrical services."
         },
         {
             title: "Google Business Profile Optimisation",
-            value: "$500",
-            description: "Rank higher in local searches."
+            value: "$608",
+            description: "Enhance your Google Business Profile to rank higher in local search results on Google Maps and Search, including adding accurate business details, photos, services, and encouraging reviews to attract more local electrician inquiries."
         },
         {
             title: "Social Media Setup (FB & Insta)",
-            value: "$300",
-            description: "Professional profiles ready to capture leads."
+            value: "$365",
+            description: "Create professional profiles on Facebook (FB) and Instagram (Insta) that are optimised and ready to capture leads, including bio setup, profile pictures, cover images, initial posts, and integration with your website for seamless lead generation."
         },
         {
             title: "AI Executive Assistant Integration",
-            value: "$1,000",
-            description: "Seamless connection to your phone and web forms."
+            value: "$1,216",
+            description: "Integrate an Artificial Intelligence (AI) executive assistant for seamless connection to your phone and web forms, automating responses, scheduling, and lead management to save time and improve customer interactions."
         },
         {
             title: "Director Mode Dashboard",
-            value: "$97/mo",
-            description: "Full visibility and control over your leads."
+            value: "$725/mo",
+            description: "Provide a Director Mode Dashboard offering full visibility and control over your leads, allowing you to track inquiries, monitor performance metrics, and manage your digital presence from a single, user-friendly interface."
         },
+        {
+            title: "Professional Email Setup",
+            value: "$365",
+            description: "Set up professional email addresses using your custom domain (e.g., via Google Workspace or Gmail for Business), including configuration, integration with your website and tools, and basic training on usage for secure and branded communication."
+        },
+        {
+            title: "Domain Registration and Hosting",
+            value: "$243",
+            description: "Register a secure custom domain name for your business and set up reliable web hosting with Secure Sockets Layer (SSL) certification to ensure your site is encrypted, trustworthy, and performs well for visitors."
+        },
+        {
+            title: "Google Ads Manager Setup",
+            value: "$730",
+            description: "Establish a basic Google Ads Manager account, conduct keyword research targeted to local electrical services, and create an initial campaign template to help drive paid traffic and generate leads efficiently."
+        },
+        {
+            title: "Local SEO Audit and Implementation",
+            value: "$608",
+            description: "Perform a local Search Engine Optimization (SEO) audit and implement improvements, including on-page SEO adjustments, building citations on relevant directories, and keyword optimization to boost your visibility in local search results."
+        },
+        {
+            title: "Review Management System",
+            value: "$365",
+            description: "Implement tools to collect, monitor, and respond to customer reviews across platforms like Google and Facebook, with automation features to send review requests and alerts, helping build trust and improve your online reputation."
+        },
+        {
+            title: "Online Booking and Scheduling Integration",
+            value: "$486",
+            description: "Embed an online booking and scheduling calendar tool directly on your website, integrated with Artificial Intelligence (AI) for automated reminders, allowing clients to book electrical services easily and reducing no-shows."
+        },
+        {
+            title: "Basic CRM Setup",
+            value: "$608",
+            description: "Set up a lightweight Customer Relationship Management (CRM) system to efficiently track leads, manage quotes, and handle follow-ups, providing a central hub for customer data and interactions tailored to small electrical businesses."
+        },
+        {
+            title: "Google Analytics and Tracking",
+            value: "$304",
+            description: "Install and configure Google Analytics on your website to track visitor behavior, traffic sources, and performance, complete with a simple reporting dashboard to help you understand and optimize your online presence."
+        },
+        {
+            title: "Logo and Basic Branding Kit",
+            value: "$608",
+            description: "Design a custom logo, select a cohesive color scheme, and provide templates for business cards and other materials, all optimized for electrical trades to create a professional and memorable brand identity."
+        },
+        {
+            title: "Initial Content Pack",
+            value: "$730",
+            description: "Develop 5–10 pages of Search Engine Optimization (SEO)-optimized website content, including service descriptions, about us sections, and blog posts on electrical tips, plus custom or stock graphics to enhance visual appeal and engagement."
+        }
     ];
 
     return (
@@ -65,7 +115,7 @@ export default function OfferStackSection() {
                         <div className="mt-12 pt-8 border-t-2 border-dashed border-primary/30 text-center">
                             <div className="mb-2 text-muted-foreground text-lg font-medium">Total Value</div>
                             <div className="text-4xl md:text-5xl font-bold text-muted-foreground line-through decoration-destructive decoration-4 opacity-70 mb-4">
-                                $4,397+
+                                $11,001+
                             </div>
                             <div className="flex flex-col items-center justify-center gap-2">
                                 <div className="text-2xl font-bold text-primary">Your Setup Price:</div>

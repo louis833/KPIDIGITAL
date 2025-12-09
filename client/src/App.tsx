@@ -9,6 +9,7 @@ import Pricing from "@/pages/Pricing";
 import About from "@/pages/About";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
+
 import CookiePolicy from "@/pages/CookiePolicy";
 
 function Router() {

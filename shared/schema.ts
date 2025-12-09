@@ -14,7 +14,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
   password: true,
 });
 
-export type InsertUser = z.infer<typeof insertUserSchema>;
+export type InsertUser = Pick<typeof users.$inferInsert, 'username' | 'password'>;
 export type User = typeof users.$inferSelect;
 
 export const quizResults = pgTable("quiz_results", {
@@ -35,5 +35,5 @@ export const insertQuizResultSchema = createInsertSchema(quizResults).omit({
   createdAt: true,
 });
 
-export type InsertQuizResult = z.infer<typeof insertQuizResultSchema>;
+export type InsertQuizResult = Omit<typeof quizResults.$inferInsert, 'id' | 'createdAt'>;
 export type QuizResult = typeof quizResults.$inferSelect;
