@@ -10,8 +10,8 @@
             {
                 "source": "**",
                 "run": {
-                    "serviceId": "kpi-digital-website",
-                    "region": "us-central1"
+                    "serviceId": "kpidigital",
+                    "region": "australia-southeast1"
                 }
             }
         ]
