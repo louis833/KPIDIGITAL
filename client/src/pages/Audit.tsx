@@ -310,16 +310,18 @@ export default function Audit() {
       if (response.ok) {
         setCurrentStep(totalSteps);
         toast({
-          title: "Success!",
-          description: "Your eligibility report has been sent.",
+          title: "Success! Eligibility Report Sent",
+          description: "Check your email (and spam) for your PDF report.",
         });
       } else {
-        throw new Error('Failed to send email');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to send email');
       }
     } catch (error) {
+      console.error('Submission error:', error);
       toast({
-        title: "Submission error",
-        description: "Please try again or contact louis@kpidigital.com.au",
+        title: "Submission Failed",
+        description: (error as Error).message || "Please try again or contact support.",
         variant: "destructive",
       });
     } finally {
