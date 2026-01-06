@@ -9,6 +9,7 @@ import Pricing from "@/pages/Pricing";
 import About from "@/pages/About";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
+import Audit from "@/pages/Audit";
 
 import CookiePolicy from "@/pages/CookiePolicy";
 
@@ -22,6 +23,7 @@ function Router() {
       <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route path="/terms-of-service" component={TermsOfService} />
       <Route path="/cookie-policy" component={CookiePolicy} />
+      <Route path="/audit" component={Audit} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>

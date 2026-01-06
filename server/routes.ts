@@ -207,6 +207,181 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // POST endpoint to handle grant audit form submissions
+  app.post("/api/send-audit-email", emailLimiter, async (req, res) => {
+    try {
+      // Validate RESEND_API_KEY is configured
+      if (!process.env.RESEND_API_KEY) {
+        console.error('RESEND_API_KEY environment variable is not set');
+        return res.status(500).json({
+          error: "Email service is not configured. Please contact support."
+        });
+      }
+
+      const { formData, eligibleGrants, estimatedSavings } = req.body;
+
+      // Validate that formData exists
+      if (!formData) {
+        console.error('formData is missing from request body:', req.body);
+        return res.status(400).json({
+          error: "Invalid request: formData is required"
+        });
+      }
+
+      // Security: Validate and sanitize all inputs
+      const sanitizedName = sanitizeName(formData.name, 100);
+      const sanitizedEmail = sanitizeEmail(formData.email);
+      const sanitizedPosition = sanitizeText(formData.position, 100);
+      const sanitizedOperatingHours = sanitizeText(formData.operatingHours, 200);
+      const sanitizedABN = sanitizeText(formData.abn, 20);
+      const sanitizedABNYear = sanitizeText(formData.abnYear, 4);
+      const sanitizedBusinessType = sanitizeText(formData.businessType, 50);
+      const sanitizedTasmania = sanitizeText(formData.basedInTasmania, 10);
+      const sanitizedEmployeeCount = sanitizeText(formData.employeeCount, 20);
+      const sanitizedRevenue = sanitizeText(formData.annualRevenue, 50);
+      const sanitizedCoContribution = sanitizeText(formData.canProvideCoContribution, 20);
+      const sanitizedManufacture = sanitizeText(formData.doYouManufacture, 10);
+      const sanitizedBuildingOwnership = sanitizeText(formData.buildingOwnership, 20);
+      const sanitizedElectricityBill = sanitizeText(formData.annualElectricityBill, 20);
+      const sanitizedElectricityUsage = sanitizeText(formData.electricityUsageMWh, 20);
+      const sanitizedPropertyComments = sanitizeText(formData.propertyComments, 2000);
+      const sanitizedTechnologyComments = sanitizeText(formData.technologyComments, 2000);
+
+      // Validate required fields
+      if (!sanitizedName || !sanitizedEmail || !sanitizedABN) {
+        return res.status(400).json({
+          error: "Invalid or missing required fields"
+        });
+      }
+
+      // Security: Escape HTML in all user inputs for email
+      const escapedName = escapeHtml(sanitizedName);
+      const escapedEmail = escapeHtml(sanitizedEmail);
+      const escapedPosition = escapeHtml(sanitizedPosition);
+      const escapedABN = escapeHtml(sanitizedABN);
+
+      // Generate grants list HTML
+      const grantsHTML = eligibleGrants.length > 0
+        ? eligibleGrants.map((grant: any) => `
+            <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid ${grant.urgent ? '#ef4444' : '#10b981'};">
+              <h4 style="margin: 0 0 8px 0; color: #111827;">${escapeHtml(grant.name)}</h4>
+              <p style="margin: 0 0 8px 0; color: #10b981; font-size: 18px; font-weight: bold;">${escapeHtml(grant.amount)}</p>
+              <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px;">${escapeHtml(grant.description)}</p>
+              ${grant.deadline ? `<p style="margin: 0 0 8px 0; color: #ef4444; font-size: 13px; font-weight: 600;">⚠️ ${escapeHtml(grant.deadline)}</p>` : ''}
+              <p style="margin: 0; color: #4b5563; font-size: 13px;"><strong>Next Steps:</strong> ${escapeHtml(grant.nextSteps)}</p>
+            </div>
+          `).join('')
+        : '<p style="color: #6b7280;">No eligible grants based on current business profile.</p>';
+
+      const savingsHTML = estimatedSavings.max > 0
+        ? `
+          <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #10b981;">
+            <h3 style="margin: 0 0 10px 0; color: #065f46;">Estimated Energy Audit Benefit</h3>
+            <p style="margin: 0 0 5px 0; font-size: 28px; font-weight: bold; color: #10b981;">
+              $${estimatedSavings.min.toLocaleString()} - $${estimatedSavings.max.toLocaleString()}
+            </p>
+            <p style="margin: 0; color: #6b7280; font-size: 14px;">
+              Potential annual savings (15-25% of $${parseFloat(formData.annualElectricityBill).toLocaleString()} annual bill)
+            </p>
+          </div>
+        `
+        : '';
+
+      // Send notification email to Louis
+      const notificationResponse = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: `KPI Digital <${process.env.EMAIL_FROM || 'noreply@receptionist.kpidigital.com.au'}>`,
+          to: ['louis@kpidigital.com.au'],
+          subject: `New Grant Audit Lead - ${escapedName} (${eligibleGrants.length} Grants Eligible)`,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; color: #111827;">
+              <h2 style="color: #111827; border-bottom: 3px solid #10b981; padding-bottom: 10px;">New Grant Eligibility Audit Submission</h2>
+              
+              <div style="background-color: #fef3f2; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="margin-top: 0; color: #991b1b;">Lead Information</h3>
+                <p><strong>Name:</strong> ${escapedName}</p>
+                <p><strong>Email:</strong> ${escapedEmail}</p>
+                <p><strong>Position:</strong> ${escapedPosition}</p>
+                <p><strong>Operating Hours:</strong> ${escapeHtml(formData.operatingHours)}</p>
+                <p><strong>ABN:</strong> ${escapedABN} (Established: ${escapeHtml(formData.abnYear)})</p>
+                <p><strong>Business Type:</strong> ${escapeHtml(formData.businessType)}</p>
+              </div>
+
+              <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="margin-top: 0;">Business Profile</h3>
+                <p><strong>Based in Tasmania:</strong> ${escapeHtml(formData.basedInTasmania)}</p>
+                <p><strong>Employees:</strong> ${escapeHtml(formData.employeeCount)} FTE</p>
+                <p><strong>Annual Revenue:</strong> ${escapeHtml(formData.annualRevenue)}</p>
+                <p><strong>Can provide 30% co-contribution:</strong> ${escapeHtml(formData.canProvideCoContribution)}</p>
+                <p><strong>Manufactures:</strong> ${escapeHtml(formData.doYouManufacture)}</p>
+                ${formData.manufacturingRevenue ? `<p><strong>Manufacturing Revenue:</strong> ${escapeHtml(formData.manufacturingRevenue)}</p>` : ''}
+              </div>
+
+              <div style="background-color: #fef9e7; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="margin-top: 0;">Property & Energy</h3>
+                <p><strong>Building Ownership:</strong> ${escapeHtml(formData.buildingOwnership)}</p>
+                ${formData.leaseTermRemaining ? `<p><strong>Lease Term Remaining:</strong> ${escapeHtml(formData.leaseTermRemaining)}</p>` : ''}
+                <p><strong>Annual Electricity Bill:</strong> $${parseFloat(formData.annualElectricityBill).toLocaleString()}</p>
+                <p><strong>Annual Electricity Usage:</strong> ${escapeHtml(formData.electricityUsageMWh)} MWh</p>
+                ${sanitizedPropertyComments ? `<p><strong>Comments:</strong> ${escapeHtml(sanitizedPropertyComments)}</p>` : ''}
+              </div>
+
+              <div style="background-color: #eff6ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="margin-top: 0;">Technology Interest</h3>
+                <p><strong>Solar Interest:</strong> ${escapeHtml(formData.solarInterest || 'Not specified')}</p>
+                ${formData.solarSystemSize ? `<p><strong>Desired Solar Size:</strong> ${escapeHtml(formData.solarSystemSize)} kW</p>` : ''}
+                <p><strong>Battery Interest:</strong> ${escapeHtml(formData.batteryInterest || 'Not specified')}</p>
+                ${formData.batterySystemSize ? `<p><strong>Desired Battery Size:</strong> ${escapeHtml(formData.batterySystemSize)} kWh</p>` : ''}
+                <p><strong>IoT/Automation Interest:</strong> ${escapeHtml(formData.iotInterest || 'Not specified')}</p>
+                ${sanitizedTechnologyComments ? `<p><strong>Comments:</strong> ${escapeHtml(sanitizedTechnologyComments)}</p>` : ''}
+              </div>
+
+              ${savingsHTML}
+
+              <div style="margin-top: 30px;">
+                <h3 style="color: #10b981; border-bottom: 2px solid #10b981; padding-bottom: 8px;">
+                  Eligible Grants (${eligibleGrants.length})
+                </h3>
+                ${grantsHTML}
+              </div>
+
+              <p style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #e5e7eb; color: #6b7280; font-size: 13px;">
+                Audit submitted via KPI Digital website on ${new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney' })}.
+              </p>
+            </div>
+          `,
+        }),
+      });
+
+      if (!notificationResponse.ok) {
+        const errorData = await notificationResponse.text();
+        console.error('Resend API error (audit notification):', errorData);
+        return res.status(500).json({
+          error: "Failed to send audit notification email"
+        });
+      }
+
+      const notificationData = await notificationResponse.json();
+
+      res.json({
+        success: true,
+        message: "Audit results submitted successfully",
+        emailId: notificationData.id,
+        eligibleGrantsCount: eligibleGrants.length
+      });
+    } catch (error) {
+      console.error('Error submitting audit:', error);
+      res.status(500).json({
+        error: "Internal server error"
+      });
+    }
+  });
+
   // POST endpoint to handle contact form submissions
   app.post("/api/contact", emailLimiter, async (req, res) => {
     try {
