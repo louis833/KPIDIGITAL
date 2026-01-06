@@ -247,18 +247,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const sanitizedPropertyComments = sanitizeText(formData.propertyComments, 2000);
       const sanitizedTechnologyComments = sanitizeText(formData.technologyComments, 2000);
 
-      // Validate required fields
-      if (!sanitizedName || !sanitizedEmail || !sanitizedABN) {
-        return res.status(400).json({
-          error: "Invalid or missing required fields"
-        });
-      }
-
       // Security: Escape HTML in all user inputs for email
-      const escapedName = escapeHtml(sanitizedName);
-      const escapedEmail = escapeHtml(sanitizedEmail);
-      const escapedPosition = escapeHtml(sanitizedPosition);
-      const escapedABN = escapeHtml(sanitizedABN);
+      const escapedName = escapeHtml(sanitizedName || '');
+      const escapedEmail = escapeHtml(sanitizedEmail || '');
+      const escapedPosition = escapeHtml(sanitizedPosition || '');
+      const escapedABN = escapeHtml(sanitizedABN || '');
 
       // Generate grants list HTML
       const grantsHTML = eligibleGrants.length > 0

@@ -40,6 +40,11 @@ export default function Navigation({ onCTAClick }: NavigationProps) {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
+            <Link href="/audit">
+              <a className="text-sm font-medium text-foreground hover:text-primary transition-colors" onClick={handleNavClick}>
+                Free Grant Audit
+              </a>
+            </Link>
             <Button
               onClick={onCTAClick}
               className="hover-elevate"
@@ -71,7 +76,11 @@ export default function Navigation({ onCTAClick }: NavigationProps) {
             className="md:hidden bg-background border-b"
           >
             <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
-              {/* Links removed for funnel focus */}
+              <Link href="/audit">
+                <a className="text-sm font-medium text-foreground hover:text-primary transition-colors py-2" onClick={handleNavClick}>
+                  Free Grant Audit
+                </a>
+              </Link>
               <Button
                 onClick={() => {
                   setIsOpen(false);

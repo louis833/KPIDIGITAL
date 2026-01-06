@@ -239,11 +239,14 @@ export default function Audit() {
     // 5. Federal Battery Rebate
     if (batterySize >= 5 && batterySize <= 100) {
       const rebatePerKWh = 300; // Approx $300/kWh for Jan-April 2026
-      const estimatedRebate = Math.round(batterySize * rebatePerKWh);
+      // Rebate capped at 50kWh capacity, but eligibility for systems up to 100kWh
+      const cappedSizeForRebate = Math.min(batterySize, 50);
+      const estimatedRebate = Math.round(cappedSizeForRebate * rebatePerKWh);
+
       grants.push({
         name: "Federal Battery Rebate (Cheaper Home Batteries Program)",
-        amount: `~$${estimatedRebate.toLocaleString()} (30% upfront discount)`,
-        description: "Upfront discount on battery storage systems (5-100 kWh).",
+        amount: `~$${estimatedRebate.toLocaleString()} (Rebate on up to 50kWh)`,
+        description: "Upfront discount for batteries 5-100kWh. Max rebate caps at 50kWh.",
         deadline: "Best value Jan-April 2026. Drops May 1, 2026.",
         urgent: true,
         nextSteps: "Install by CEC accredited installer before May 1, 2026 for maximum rebate."
@@ -251,12 +254,13 @@ export default function Audit() {
     }
 
     // 6. Solar PV Rebate
-    if (solarSize > 0 && solarSize < 100) {
-      const estimatedSolarRebate = solarSize >= 10 ? 3500 : Math.round(solarSize * 350);
+    if (solarSize > 0 && solarSize <= 100) {
+      // Estimate ~$380 per kW for STCs roughly
+      const estimatedSolarRebate = Math.round(solarSize * 380);
       grants.push({
         name: "Solar PV Rebate (STCs)",
         amount: `~$${estimatedSolarRebate.toLocaleString()}`,
-        description: "Upfront discount on solar panel systems under 100kW.",
+        description: "Upfront discount (STCs) on solar systems up to 100kW.",
         nextSteps: "Get quotes from CEC accredited installers to claim STCs."
       });
     }
