@@ -21,7 +21,8 @@ import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 
 interface FormData {
-  // Step 1: Contact Details
+  // Step 1: Contact & Eligibility
+  claimedGrantBefore: string;
   name: string;
   email: string;
   position: string;
@@ -60,6 +61,7 @@ interface FormData {
 }
 
 const initialFormData: FormData = {
+  claimedGrantBefore: "",
   name: "",
   email: "",
   position: "",
@@ -331,6 +333,16 @@ export default function Audit() {
         return (
           <StepContainer title="Let's Get Started" subtitle="Your contact details">
             <div className="space-y-6">
+              <SelectField
+                label="Have you claimed the Power Smart Grant before?"
+                value={formData.claimedGrantBefore}
+                onChange={(value) => updateField("claimedGrantBefore", value)}
+                options={[
+                  { value: "yes", label: "Yes" },
+                  { value: "no", label: "No" },
+                  { value: "unsure", label: "Unsure" },
+                ]}
+              />
               <InputField
                 label="Full Name"
                 value={formData.name}

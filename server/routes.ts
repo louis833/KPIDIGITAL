@@ -219,6 +219,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           error: "Email service is not configured. Please contact support."
         });
       }
+      console.log('[Audit] RESEND_API_KEY is configured.');
 
       const { formData, eligibleGrants, estimatedSavings } = req.body;
 
@@ -230,7 +231,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
+      console.log('[Audit] Processing form data for:', formData.businessName);
+
       // Security: Validate and sanitize all inputs
+      const sanitizedClaimedGrantBefore = sanitizeText(formData.claimedGrantBefore, 20);
       const sanitizedName = sanitizeName(formData.name, 100);
       const sanitizedEmail = sanitizeEmail(formData.email);
       const sanitizedPosition = sanitizeText(formData.position, 100);
@@ -302,8 +306,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
         console.log('[Audit] Invoice generated successfully. Buffer size:', invoiceBuffer.length);
       } catch (err) {
-        console.error('[Audit] Invoice generation failed:', err);
-        throw err;
+        console.error('[Audit] Invoice generation failed explicitly:', err);
+        throw new Error(`Invoice generation failed: ${(err as Error).message}`);
       }
 
       // Send notification email to Louis
@@ -372,7 +376,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   <div style="background-color: #fef3f2; padding: 20px; border-radius: 8px; width: 100%;">
                     <h4 style="margin: 0 0 15px 0; color: #000000; font-size: 16px; font-weight: bold;">Full Lead Profile</h4>
                     <table style="width: 100%; border-collapse: collapse; font-size: 13px; color: #4b5563;">
-                      <tr><td style="padding: 4px 0; width: 120px;"><strong>Name:</strong></td><td>${escapedName}</td></tr>
+                      <tr><td style="padding: 4px 0; width: 120px;"><strong>Claimed Before?</strong></td><td>${escapeHtml(sanitizedClaimedGrantBefore || 'Not specified')}</td></tr>
+                      <tr><td style="padding: 4px 0;"><strong>Name:</strong></td><td>${escapedName}</td></tr>
                       <tr><td style="padding: 4px 0;"><strong>Business:</strong></td><td>${escapeHtml(formData.businessName)}</td></tr>
                       <tr><td style="padding: 4px 0;"><strong>ABN:</strong></td><td>${escapedABN} (${escapeHtml(formData.abnYear)})</td></tr>
                       <tr><td style="padding: 4px 0;"><strong>Revenue:</strong></td><td>${escapeHtml(formData.annualRevenue)}</td></tr>
@@ -395,11 +400,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!notificationResponse.ok) {
         const errorData = await notificationResponse.text();
         console.error('[Audit] Resend API error (audit notification):', errorData);
-        return res.status(500).json({
-          error: "Failed to send audit notification email"
-        });
+        // Throw status specific error to distinguish network vs content error
+        throw new Error(`Resend Email Failed: ${errorData}`);
       }
-      console.log('[Audit] Notification email sent successfully.');
+      console.log('[Audit] Notification email sent successfully to Louis.');
 
       const notificationData = await notificationResponse.json();
 
@@ -410,9 +414,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         eligibleGrantsCount: eligibleGrants.length
       });
     } catch (error) {
-      console.error('[Audit] Error submitting audit:', error);
+      console.error('[Audit] CRITICAL ERROR in /api/send-audit-email:', error);
+      // Return 500 but also include message for debugging if in dev
       res.status(500).json({
-        error: "Internal server error"
+        error: `Submission failed. Server logs have details. ${(error as Error).message}`
       });
     }
   });
