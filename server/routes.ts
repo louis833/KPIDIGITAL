@@ -14,6 +14,7 @@ import {
   sanitizeScore,
   validateTierName
 } from "./security";
+import { generateInvoiceBuffer } from "./invoice";
 
 // Security: Strict rate limiter for email endpoints (prevent spam/abuse)
 const emailLimiter = rateLimit({
@@ -256,21 +257,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate grants list HTML
       const grantsHTML = eligibleGrants.length > 0
         ? eligibleGrants.map((grant: any) => `
-            <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid ${grant.urgent ? '#ef4444' : '#10b981'};">
-              <h4 style="margin: 0 0 8px 0; color: #111827;">${escapeHtml(grant.name)}</h4>
-              <p style="margin: 0 0 8px 0; color: #10b981; font-size: 18px; font-weight: bold;">${escapeHtml(grant.amount)}</p>
-              <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px;">${escapeHtml(grant.description)}</p>
-              ${grant.deadline ? `<p style="margin: 0 0 8px 0; color: #ef4444; font-size: 13px; font-weight: 600;">⚠️ ${escapeHtml(grant.deadline)}</p>` : ''}
-              <p style="margin: 0; color: #4b5563; font-size: 13px;"><strong>Next Steps:</strong> ${escapeHtml(grant.nextSteps)}</p>
+            <div style="background-color: #ffffff; padding: 25px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e5e7eb; ${grant.urgent ? 'border-left: 6px solid #000000;' : ''}">
+              <div style="margin-bottom: 12px;">
+                <h4 style="margin: 0; color: #000000; font-size: 18px; font-weight: bold;">${escapeHtml(grant.name)}</h4>
+                <p style="margin: 5px 0 0 0; color: #000000; font-size: 24px; font-weight: 800;">${escapeHtml(grant.amount)}</p>
+              </div>
+              <p style="margin: 0 0 15px 0; color: #4b5563; font-size: 14px; line-height: 1.5;">${escapeHtml(grant.description)}</p>
+              ${grant.deadline ? `<p style="margin: 0 0 15px 0; color: #000000; font-size: 13px; font-weight: 700;">⚠️ Deadline: ${escapeHtml(grant.deadline)}</p>` : ''}
+              <div style="background-color: #f3f4f6; padding: 15px; border-radius: 6px;">
+                <p style="margin: 0 0 5px 0; color: #111827; font-size: 13px; font-weight: bold;">Next Steps:</p>
+                <p style="margin: 0; color: #4b5563; font-size: 13px; line-height: 1.4;">${escapeHtml(grant.nextSteps)}</p>
+              </div>
             </div>
           `).join('')
-        : '<p style="color: #6b7280;">No eligible grants based on current business profile.</p>';
+        : '<p style="color: #6b7280; text-align: center; padding: 30px; border: 1px dashed #e5e7eb; border-radius: 8px;">No eligible grants based on current business profile.</p>';
 
       const savingsHTML = estimatedSavings.max > 0
         ? `
-          <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #10b981;">
-            <h3 style="margin: 0 0 10px 0; color: #065f46;">Estimated Energy Audit Benefit</h3>
-            <p style="margin: 0 0 5px 0; font-size: 28px; font-weight: bold; color: #10b981;">
+          <div style="background-color: #ffffff; padding: 25px; border-radius: 8px; margin: 20px 0; border: 1px solid #000000;">
+            <h3 style="margin: 0 0 12px 0; color: #000000; font-size: 20px; font-weight: bold;">Estimated Energy Audit Benefit</h3>
+            <p style="margin: 0 0 8px 0; font-size: 32px; font-weight: 800; color: #000000;">
               $${estimatedSavings.min.toLocaleString()} - $${estimatedSavings.max.toLocaleString()}
             </p>
             <p style="margin: 0; color: #6b7280; font-size: 14px;">
@@ -280,7 +286,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         `
         : '';
 
+      const invoiceNumber = `KPI-${Math.floor(1000 + Math.random() * 9000)} `;
+
+      console.log('Generating invoice for:', escapedName);
+      let invoiceBuffer: Buffer;
+      try {
+        invoiceBuffer = await generateInvoiceBuffer({
+          invoiceNumber,
+          date: new Date().toLocaleDateString('en-AU'),
+          customerName: escapedName,
+          customerEmail: escapedEmail,
+          businessName: escapeHtml(formData.businessName),
+          abn: escapedABN
+        });
+        console.log('Invoice generated. Buffer size:', invoiceBuffer.length);
+      } catch (err) {
+        console.error('Invoice generation failed:', err);
+        throw err;
+      }
+
       // Send notification email to Louis
+      console.log('Sending email with attachment...');
       const notificationResponse = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
@@ -291,61 +317,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
           from: `KPI Digital <${process.env.EMAIL_FROM || 'noreply@receptionist.kpidigital.com.au'}>`,
           to: ['louis@kpidigital.com.au'],
           subject: `New Grant Audit Lead - ${escapedName} (${eligibleGrants.length} Grants Eligible)`,
+          attachments: [
+            {
+              filename: `Invoice_${invoiceNumber}.pdf`,
+              content: invoiceBuffer.toString('base64')
+            }
+          ],
           html: `
-            <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; color: #111827;">
-              <h2 style="color: #111827; border-bottom: 3px solid #10b981; padding-bottom: 10px;">New Grant Eligibility Audit Submission</h2>
-              
-              <div style="background-color: #fef3f2; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                <h3 style="margin-top: 0; color: #991b1b;">Lead Information</h3>
-                <p><strong>Name:</strong> ${escapedName}</p>
-                <p><strong>Email:</strong> ${escapedEmail}</p>
-                <p><strong>Position:</strong> ${escapedPosition}</p>
-                <p><strong>Operating Hours:</strong> ${escapeHtml(formData.operatingHours)}</p>
-                <p><strong>ABN:</strong> ${escapedABN} (Established: ${escapeHtml(formData.abnYear)})</p>
-                <p><strong>Business Type:</strong> ${escapeHtml(formData.businessType)}</p>
+            <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; color: #111827; background-color: #f9fafb; padding: 20px;">
+              <div style="background-color: #ffffff; padding: 40px; border-radius: 12px; border: 2px solid #000000; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div style="text-align: center; margin-bottom: 30px;">
+                  <div style="width: 60px; height: 60px; background-color: #000000; border-radius: 50%; display: inline-block; margin-bottom: 15px;">
+                    <span style="color: #ffffff; font-size: 35px; line-height: 60px;">✓</span>
+                  </div>
+                  <h2 style="margin: 0; color: #000000; font-size: 28px; font-weight: 800;">Eligibility Results</h2>
+                  <p style="margin: 10px 0 0 0; color: #6b7280; font-size: 16px;">
+                    Based on responses, eligible for ${eligibleGrants.length} grant opportunity
+                  </p>
+                </div>
+
+                ${savingsHTML}
+
+                <div style="margin: 30px 0;">
+                  <h3 style="color: #000000; font-size: 22px; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #f3f4f6; padding-bottom: 10px;">
+                    Grant Opportunities
+                  </h3>
+                  ${grantsHTML.join('')}
+                </div>
+
+                <div style="background-color: #f3f4f6; padding: 30px; border-radius: 8px; margin-top: 40px;">
+                  <h3 style="margin-top: 0; color: #000000; font-size: 20px; font-weight: bold; margin-bottom: 20px;">What Happens Next?</h3>
+                  <ul style="margin: 0; padding: 0; list-style-type: none;">
+                    <li style="margin-bottom: 15px; display: flex;">
+                      <span style="color: #000000; margin-right: 12px; font-weight: bold;">✓</span>
+                      <span style="color: #4b5563; font-size: 14px;">We've sent this eligibility report to <strong>${escapedEmail}</strong></span>
+                    </li>
+                    <li style="margin-bottom: 15px; display: flex;">
+                      <span style="color: #000000; margin-right: 12px; font-weight: bold;">✓</span>
+                      <span style="color: #4b5563; font-size: 14px;">Our team will review the submission and contact you within 48 hours</span>
+                    </li>
+                    <li style="margin-bottom: 15px; display: flex;">
+                      <span style="color: #000000; margin-right: 12px; font-weight: bold;">✓</span>
+                      <span style="color: #4b5563; font-size: 14px;">We'll help you prepare the necessary documentation for each grant</span>
+                    </li>
+                    <li style="display: flex;">
+                      <span style="color: #000000; margin-right: 12px; font-weight: bold;">✓</span>
+                      <span style="color: #4b5563; font-size: 14px;">Questions? Email <a href="mailto:louis@kpidigital.com.au" style="color: #000000; font-weight: bold; text-decoration: underline;">louis@kpidigital.com.au</a></span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #e5e7eb; display: flex; align-items: flex-start; gap: 20px;">
+                  <div style="background-color: #fef3f2; padding: 20px; border-radius: 8px; width: 100%;">
+                    <h4 style="margin: 0 0 15px 0; color: #000000; font-size: 16px; font-weight: bold;">Full Lead Profile</h4>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 13px; color: #4b5563;">
+                      <tr><td style="padding: 4px 0; width: 120px;"><strong>Name:</strong></td><td>${escapedName}</td></tr>
+                      <tr><td style="padding: 4px 0;"><strong>Business:</strong></td><td>${escapeHtml(formData.businessName)}</td></tr>
+                      <tr><td style="padding: 4px 0;"><strong>ABN:</strong></td><td>${escapedABN} (${escapeHtml(formData.abnYear)})</td></tr>
+                      <tr><td style="padding: 4px 0;"><strong>Revenue:</strong></td><td>${escapeHtml(formData.annualRevenue)}</td></tr>
+                      <tr><td style="padding: 4px 0;"><strong>Employees:</strong></td><td>${escapeHtml(formData.employeeCount)} FTE</td></tr>
+                      <tr><td style="padding: 4px 0;"><strong>Annual Bill:</strong></td><td>${escapeHtml(formData.annualElectricityBill)}</td></tr>
+                      <tr><td style="padding: 4px 0;"><strong>Annual Usage:</strong></td><td>${escapeHtml(formData.electricityUsageMWh)} MWh</td></tr>
+                    </table>
+                  </div>
+                </div>
+
+                <p style="margin-top: 30px; color: #9ca3af; font-size: 12px; text-align: center;">
+                  Submitted via KPI Digital Audit on ${new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney' })}.
+                </p>
               </div>
-
-              <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                <h3 style="margin-top: 0;">Business Profile</h3>
-                <p><strong>Based in Tasmania:</strong> ${escapeHtml(formData.basedInTasmania)}</p>
-                <p><strong>Employees:</strong> ${escapeHtml(formData.employeeCount)} FTE</p>
-                <p><strong>Annual Revenue:</strong> ${escapeHtml(formData.annualRevenue)}</p>
-                <p><strong>Can provide 30% co-contribution:</strong> ${escapeHtml(formData.canProvideCoContribution)}</p>
-                <p><strong>Manufactures:</strong> ${escapeHtml(formData.doYouManufacture)}</p>
-                ${formData.manufacturingRevenue ? `<p><strong>Manufacturing Revenue:</strong> ${escapeHtml(formData.manufacturingRevenue)}</p>` : ''}
-              </div>
-
-              <div style="background-color: #fef9e7; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                <h3 style="margin-top: 0;">Property & Energy</h3>
-                <p><strong>Building Ownership:</strong> ${escapeHtml(formData.buildingOwnership)}</p>
-                ${formData.leaseTermRemaining ? `<p><strong>Lease Term Remaining:</strong> ${escapeHtml(formData.leaseTermRemaining)}</p>` : ''}
-                <p><strong>Annual Electricity Bill:</strong> $${parseFloat(formData.annualElectricityBill).toLocaleString()}</p>
-                <p><strong>Annual Electricity Usage:</strong> ${escapeHtml(formData.electricityUsageMWh)} MWh</p>
-                ${sanitizedPropertyComments ? `<p><strong>Comments:</strong> ${escapeHtml(sanitizedPropertyComments)}</p>` : ''}
-              </div>
-
-              <div style="background-color: #eff6ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                <h3 style="margin-top: 0;">Technology Interest</h3>
-                <p><strong>Solar Interest:</strong> ${escapeHtml(formData.solarInterest || 'Not specified')}</p>
-                ${formData.solarSystemSize ? `<p><strong>Desired Solar Size:</strong> ${escapeHtml(formData.solarSystemSize)} kW</p>` : ''}
-                <p><strong>Battery Interest:</strong> ${escapeHtml(formData.batteryInterest || 'Not specified')}</p>
-                ${formData.batterySystemSize ? `<p><strong>Desired Battery Size:</strong> ${escapeHtml(formData.batterySystemSize)} kWh</p>` : ''}
-                <p><strong>IoT/Automation Interest:</strong> ${escapeHtml(formData.iotInterest || 'Not specified')}</p>
-                ${sanitizedTechnologyComments ? `<p><strong>Comments:</strong> ${escapeHtml(sanitizedTechnologyComments)}</p>` : ''}
-              </div>
-
-              ${savingsHTML}
-
-              <div style="margin-top: 30px;">
-                <h3 style="color: #10b981; border-bottom: 2px solid #10b981; padding-bottom: 8px;">
-                  Eligible Grants (${eligibleGrants.length})
-                </h3>
-                ${grantsHTML}
-              </div>
-
-              <p style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #e5e7eb; color: #6b7280; font-size: 13px;">
-                Audit submitted via KPI Digital website on ${new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney' })}.
-              </p>
             </div>
           `,
         }),
@@ -422,28 +462,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         body: JSON.stringify({
           from: 'KPI Digital <onboarding@resend.dev>',
           to: ['louis@kpidigital.com.au'],
-          subject: `New Contact Form: ${escapedSubject}`,
+          subject: `New Contact Form: ${escapedSubject} `,
           html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-              <h2 style="color: #ea580c;">New Contact Form Submission</h2>
-              
-              <div style="background-color: #fef3f2; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                <h3 style="margin-top: 0;">Contact Information</h3>
-                <p><strong>Name:</strong> ${escapedName}</p>
-                <p><strong>Email:</strong> ${escapedEmail}</p>
-                <p><strong>Subject:</strong> ${escapedSubject}</p>
-              </div>
+    < div style = "font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;" >
+      <h2 style="color: #ea580c;" > New Contact Form Submission </h2>
 
-              <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                <h3 style="margin-top: 0;">Message</h3>
-                <p style="white-space: pre-wrap;">${escapedMessage}</p>
-              </div>
+        < div style = "background-color: #fef3f2; padding: 20px; border-radius: 8px; margin: 20px 0;" >
+          <h3 style="margin-top: 0;" > Contact Information </h3>
+            < p > <strong>Name: </strong> ${escapedName}</p >
+              <p><strong>Email: </strong> ${escapedEmail}</p >
+                <p><strong>Subject: </strong> ${escapedSubject}</p >
+                  </div>
 
-              <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e5e5; color: #666; font-size: 14px;">
-                This contact form was submitted through the KPI Digital website on ${new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney' })}.
-              </p>
-            </div>
-          `,
+                  < div style = "background-color: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;" >
+                    <h3 style="margin-top: 0;" > Message </h3>
+                      < p style = "white-space: pre-wrap;" > ${escapedMessage} </p>
+                        </div>
+
+                        < p style = "margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e5e5; color: #666; font-size: 14px;" >
+                          This contact form was submitted through the KPI Digital website on ${new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney' })}.
+  </p>
+    </div>
+      `,
         }),
       });
 
@@ -467,32 +507,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
           to: [sanitizedEmail],
           subject: 'Thank You for Contacting KPI Digital',
           html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-              <h2 style="color: #ea580c;">Thank You for Reaching Out!</h2>
-              
-              <p>Hi ${escapedName},</p>
-              
-              <p>We've received your message and our team will review it shortly. We aim to respond to all enquiries within 24 hours.</p>
+    < div style = "font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;" >
+      <h2 style="color: #ea580c;" > Thank You for Reaching Out! </h2>
 
-              <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                <h3 style="margin-top: 0;">Your Message Summary</h3>
-                <p><strong>Subject:</strong> ${escapedSubject}</p>
-                <p><strong>Message:</strong></p>
-                <p style="white-space: pre-wrap; color: #666;">${escapedMessage}</p>
-              </div>
+        < p > Hi ${escapedName}, </p>
 
-              <p>If you have any urgent questions, feel free to reply to this email or contact Louis directly at louis@kpidigital.com.au.</p>
+          < p > We've received your message and our team will review it shortly. We aim to respond to all enquiries within 24 hours.</p>
 
-              <p style="margin-top: 30px;">
-                Best regards,<br/>
-                <strong>The KPI Digital Team</strong>
+            < div style = "background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;" >
+              <h3 style="margin-top: 0;" > Your Message Summary </h3>
+                < p > <strong>Subject: </strong> ${escapedSubject}</p >
+                  <p><strong>Message: </strong></p >
+                    <p style="white-space: pre-wrap; color: #666;" > ${escapedMessage} </p>
+                      </div>
+
+                      < p > If you have any urgent questions, feel free to reply to this email or contact Louis directly at louis @kpidigital.com.au.</p>
+
+                        < p style = "margin-top: 30px;" >
+                          Best regards, <br/>
+                            < strong > The KPI Digital Team </strong>
+                              </p>
+
+                              < p style = "margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e5e5; color: #666; font-size: 14px;" >
+                                This is an automated confirmation email.Please do not reply to this email directly.
               </p>
-
-              <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e5e5; color: #666; font-size: 14px;">
-                This is an automated confirmation email. Please do not reply to this email directly.
-              </p>
-            </div>
-          `,
+                                  </div>
+                                    `,
         }),
       });
 
@@ -577,18 +617,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         body: JSON.stringify({
           from: 'KPI Digital <onboarding@resend.dev>',
           to: ['louis@kpidigital.com.au'],
-          subject: `New ${escapedCalculatorType} Assessment - ${escapedUserEmail}`,
+          subject: `New ${escapedCalculatorType} Assessment - ${escapedUserEmail} `,
           html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-              <h2 style="color: #ea580c;">New ${escapedCalculatorType} Assessment Completed</h2>
-              
-              <div style="background-color: #fef3f2; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                <h3 style="margin-top: 0;">Client Information</h3>
-                <p><strong>Email:</strong> ${escapedUserEmail}</p>
-                <p><strong>Assessment Type:</strong> ${escapedCalculatorType}</p>
-                <p><strong>Score:</strong> ${sanitizedScore}/${sanitizedMaxScore}</p>
-                <p><strong>Tier:</strong> ${escapedTierName}</p>
-              </div>
+    < div style = "font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;" >
+      <h2 style="color: #ea580c;" > New ${escapedCalculatorType} Assessment Completed </h2>
+
+        < div style = "background-color: #fef3f2; padding: 20px; border-radius: 8px; margin: 20px 0;" >
+          <h3 style="margin-top: 0;" > Client Information </h3>
+            < p > <strong>Email: </strong> ${escapedUserEmail}</p >
+              <p><strong>Assessment Type: </strong> ${escapedCalculatorType}</p >
+                <p><strong>Score: </strong> ${sanitizedScore}/${sanitizedMaxScore} </p>
+                  < p > <strong>Tier: </strong> ${escapedTierName}</p >
+                    </div>
 
               ${sanitizedCategories.length > 0 ? `
                 <h3>Category Breakdown</h3>
@@ -597,13 +637,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
             `<li><strong>${escapeHtml(cat.name)}:</strong> ${cat.score}/${cat.maxScore} points</li>`
           ).join('')}
                 </ul>
-              ` : ''}
+              ` : ''
+            }
 
-              <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e5e5; color: #666; font-size: 14px;">
-                This notification was sent automatically when a client downloaded their assessment report.
+  <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e5e5; color: #666; font-size: 14px;" >
+    This notification was sent automatically when a client downloaded their assessment report.
               </p>
-            </div>
-          `,
+      </div>
+        `,
         }),
       });
 

@@ -31,6 +31,7 @@ interface FormData {
   abn: string;
   abnYear: string;
   businessType: string;
+  businessName: string;
   basedInTasmania: string;
   employeeCount: string;
 
@@ -66,6 +67,7 @@ const initialFormData: FormData = {
   abn: "",
   abnYear: "",
   businessType: "",
+  businessName: "",
   basedInTasmania: "",
   employeeCount: "",
   annualRevenue: "",
@@ -96,7 +98,7 @@ export default function Audit() {
   const recognitionRef = useRef<any>(null);
   const { toast } = useToast();
 
-  const totalSteps = formData.doYouManufacture === "yes" ? 7 : 6;
+  const totalSteps = 7;
 
   // Initialize Speech Recognition
   useEffect(() => {
@@ -165,29 +167,29 @@ export default function Audit() {
   };
 
   const nextStep = () => {
-    if (currentStep === 4 && formData.doYouManufacture === "no") {
-      setCurrentStep(5); // Skip manufacturing revenue step
-    } else {
-      setCurrentStep(prev => Math.min(prev + 1, totalSteps));
-    }
+    setCurrentStep(prev => Math.min(prev + 1, totalSteps));
   };
 
   const prevStep = () => {
-    if (currentStep === 5 && formData.doYouManufacture === "no") {
-      setCurrentStep(4);
-    } else {
-      setCurrentStep(prev => Math.max(prev - 1, 1));
-    }
+    setCurrentStep(prev => Math.max(prev - 1, 1));
   };
 
   const calculateEligibility = () => {
     const grants = [];
-    const fteCount = parseInt(formData.employeeCount);
-    const revenue = parseFloat(formData.annualRevenue.replace(/[^0-9.]/g, ''));
-    const manufacturingRevenue = formData.manufacturingRevenue ? parseFloat(formData.manufacturingRevenue.replace(/[^0-9.]/g, '')) : 0;
-    const electricityMWh = parseFloat(formData.electricityUsageMWh);
-    const batterySize = formData.batterySystemSize ? parseFloat(formData.batterySystemSize) : 0;
-    const solarSize = formData.solarSystemSize ? parseFloat(formData.solarSystemSize) : 0;
+
+    // Helper to get leading number from strings like "100-200" or "$50,000+"
+    const parseNum = (val: string | undefined): number => {
+      if (!val) return 0;
+      const match = val.replace(/,/g, '').match(/\d+/);
+      return match ? parseInt(match[0], 10) : 0;
+    };
+
+    const fteCount = parseNum(formData.employeeCount);
+    const revenue = parseNum(formData.annualRevenue);
+    const manufacturingRevenue = parseNum(formData.manufacturingRevenue);
+    const electricityMWh = parseNum(formData.electricityUsageMWh);
+    const batterySize = parseNum(formData.batterySystemSize);
+    const solarSize = parseNum(formData.solarSystemSize);
 
     // 1. PowerSmart for Small Business
     if (formData.basedInTasmania === "yes" && fteCount >= 1 && fteCount <= 19) {
@@ -200,7 +202,8 @@ export default function Audit() {
     }
 
     // 2. Enabling Business Grant
-    if (fteCount <= 19 && revenue >= 50000 && revenue <= 10000000 && formData.canProvideCoContribution === "yes") {
+    // Include yes, maybe, and unsure co-contribution
+    if (fteCount <= 19 && (revenue >= 50000 || revenue === 0) && revenue <= 10000000 && formData.canProvideCoContribution !== "no") {
       grants.push({
         name: "Enabling Business Grant Program",
         amount: "$2,500 - $10,000",
@@ -237,16 +240,16 @@ export default function Audit() {
     }
 
     // 5. Federal Battery Rebate
-    if (batterySize >= 5 && batterySize <= 100) {
-      const rebatePerKWh = 300; // Approx $300/kWh for Jan-April 2026
-      // Rebate capped at 50kWh capacity, but eligibility for systems up to 100kWh
-      const cappedSizeForRebate = Math.min(batterySize, 50);
+    if ((formData.batteryInterest === "yes" || formData.batteryInterest === "maybe") || (batterySize >= 5 && batterySize <= 100)) {
+      const rebatePerKWh = 300;
+      const sizeForCalc = batterySize > 0 ? batterySize : 15; // Default to 15kWh for estimation if not specified
+      const cappedSizeForRebate = Math.min(sizeForCalc, 50);
       const estimatedRebate = Math.round(cappedSizeForRebate * rebatePerKWh);
 
       grants.push({
-        name: "Federal Battery Rebate (Cheaper Home Batteries Program)",
-        amount: `~$${estimatedRebate.toLocaleString()} (Rebate on up to 50kWh)`,
-        description: "Upfront discount for batteries 5-100kWh. Max rebate caps at 50kWh.",
+        name: "Federal Battery Rebate (Cheaper Home Batteries)",
+        amount: batterySize > 0 ? `~$${estimatedRebate.toLocaleString()}` : "$4,500 - $15,000+",
+        description: `Upfront discount for batteries 5kWh-100kWh. Rebate calculated at ~$${rebatePerKWh}/kWh on up to 50kWh capacity.`,
         deadline: "Best value Jan-April 2026. Drops May 1, 2026.",
         urgent: true,
         nextSteps: "Install by CEC accredited installer before May 1, 2026 for maximum rebate."
@@ -254,13 +257,18 @@ export default function Audit() {
     }
 
     // 6. Solar PV Rebate
-    if (solarSize > 0 && solarSize <= 100) {
-      // Estimate ~$380 per kW for STCs roughly
-      const estimatedSolarRebate = Math.round(solarSize * 380);
+    if ((formData.solarInterest === "yes" || formData.solarInterest === "maybe") || (solarSize > 0 && solarSize <= 100)) {
+      const stcPrice = 40;
+      const deemingPeriod = 5;
+      const zoneRating = 1.185;
+      const sizeForCalc = solarSize > 0 ? solarSize : 30; // Default 30kW for estimate
+      const stcCount = Math.round(sizeForCalc * deemingPeriod * zoneRating);
+      const estimatedSolarRebate = stcCount * stcPrice;
+
       grants.push({
         name: "Solar PV Rebate (STCs)",
-        amount: `~$${estimatedSolarRebate.toLocaleString()}`,
-        description: "Upfront discount (STCs) on solar systems up to 100kW.",
+        amount: solarSize > 0 ? `~$${estimatedSolarRebate.toLocaleString()}` : "$3,000 - $38,000+",
+        description: `Upfront discount via ${stcCount} STCs calculated at ~$${stcPrice}/STC. Eligible for systems up to 100kW.`,
         nextSteps: "Get quotes from CEC accredited installers to claim STCs."
       });
     }
@@ -356,6 +364,12 @@ export default function Audit() {
         return (
           <StepContainer title="Business Profile" subtitle="Tell us about your business">
             <div className="space-y-6">
+              <InputField
+                label="Registered Business/Company Name"
+                value={formData.businessName}
+                onChange={(e) => updateField("businessName", e.target.value)}
+                placeholder="Company Pty Ltd"
+              />
               <InputField
                 label="Australian Business Number (ABN)"
                 value={formData.abn}
@@ -851,9 +865,9 @@ interface ResultsStepProps {
 function ResultsStep({ grants, savings, formData }: ResultsStepProps) {
   return (
     <div className="space-y-8">
-      <Card className="p-8 border-2 border-primary bg-primary/5">
+      <Card className="p-8 border-2 border-black bg-black/5">
         <div className="text-center mb-6">
-          <CheckCircle2 className="w-16 h-16 text-primary mx-auto mb-4" />
+          <CheckCircle2 className="w-16 h-16 text-black mx-auto mb-4" />
           <h2 className="text-3xl font-bold mb-2">Eligibility Results</h2>
           <p className="text-lg text-muted-foreground">
             Based on your responses, you're eligible for {grants.length} grant{grants.length !== 1 ? 's' : ''}!
@@ -861,9 +875,9 @@ function ResultsStep({ grants, savings, formData }: ResultsStepProps) {
         </div>
 
         {savings.max > 0 && (
-          <div className="bg-background rounded-lg p-6 mb-6">
+          <div className="bg-background rounded-lg p-6 mb-6 border border-black/10">
             <h3 className="text-xl font-bold mb-2">Estimated Energy Audit Benefit</h3>
-            <p className="text-3xl font-bold text-primary mb-2">
+            <p className="text-3xl font-bold text-black mb-2">
               ${savings.min.toLocaleString()} - ${savings.max.toLocaleString()}
             </p>
             <p className="text-muted-foreground">
@@ -889,7 +903,7 @@ function ResultsStep({ grants, savings, formData }: ResultsStepProps) {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-xl font-bold mb-1">{grant.name}</h3>
-                  <p className="text-2xl font-bold text-primary">{grant.amount}</p>
+                  <p className="text-2xl font-bold text-black">{grant.amount}</p>
                 </div>
                 {grant.urgent && (
                   <span className="bg-destructive text-destructive-foreground text-xs font-semibold px-3 py-1 rounded-full">
@@ -928,8 +942,8 @@ function ResultsStep({ grants, savings, formData }: ResultsStepProps) {
             <span>We'll help you prepare the necessary documentation for each grant application</span>
           </li>
           <li className="flex gap-3">
-            <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-            <span>Questions? Email <a href="mailto:louis@kpidigital.com.au" className="text-primary underline">louis@kpidigital.com.au</a></span>
+            <CheckCircle2 className="w-5 h-5 text-black flex-shrink-0 mt-0.5" />
+            <span>Questions? Email <a href="mailto:louis@kpidigital.com.au" className="text-black font-semibold underline">louis@kpidigital.com.au</a></span>
           </li>
         </ul>
       </Card>
