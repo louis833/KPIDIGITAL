@@ -210,10 +210,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // POST endpoint to handle grant audit form submissions
   app.post("/api/send-audit-email", emailLimiter, async (req, res) => {
+    console.log('[Audit] Received audit submission request');
     try {
       // Validate RESEND_API_KEY is configured
       if (!process.env.RESEND_API_KEY) {
-        console.error('RESEND_API_KEY environment variable is not set');
+        console.error('[Audit] RESEND_API_KEY environment variable is not set');
         return res.status(500).json({
           error: "Email service is not configured. Please contact support."
         });
@@ -280,7 +281,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               $${estimatedSavings.min.toLocaleString()} - $${estimatedSavings.max.toLocaleString()}
             </p>
             <p style="margin: 0; color: #6b7280; font-size: 14px;">
-              Potential annual savings (15-25% of $${parseFloat(formData.annualElectricityBill).toLocaleString()} annual bill)
+              Potential annual savings (15-25% of $${parseFloat(formData.annualElectricityBill.replace(/[^0-9.-]+/g, "") || '0').toLocaleString()} annual bill)
             </p>
           </div>
         `
@@ -288,7 +289,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const invoiceNumber = `KPI-${Math.floor(1000 + Math.random() * 9000)} `;
 
-      console.log('Generating invoice for:', escapedName);
+      console.log('[Audit] Generating invoice for:', escapedName);
       let invoiceBuffer: Buffer;
       try {
         invoiceBuffer = await generateInvoiceBuffer({
@@ -299,14 +300,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           businessName: escapeHtml(formData.businessName),
           abn: escapedABN
         });
-        console.log('Invoice generated. Buffer size:', invoiceBuffer.length);
+        console.log('[Audit] Invoice generated successfully. Buffer size:', invoiceBuffer.length);
       } catch (err) {
-        console.error('Invoice generation failed:', err);
+        console.error('[Audit] Invoice generation failed:', err);
         throw err;
       }
 
       // Send notification email to Louis
-      console.log('Sending email with attachment...');
+      console.log('[Audit] Sending notification email to Louis...');
       const notificationResponse = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
@@ -342,7 +343,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   <h3 style="color: #000000; font-size: 22px; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #f3f4f6; padding-bottom: 10px;">
                     Grant Opportunities
                   </h3>
-                  ${grantsHTML.join('')}
+                  ${grantsHTML}
                 </div>
 
                 <div style="background-color: #f3f4f6; padding: 30px; border-radius: 8px; margin-top: 40px;">
@@ -393,11 +394,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       if (!notificationResponse.ok) {
         const errorData = await notificationResponse.text();
-        console.error('Resend API error (audit notification):', errorData);
+        console.error('[Audit] Resend API error (audit notification):', errorData);
         return res.status(500).json({
           error: "Failed to send audit notification email"
         });
       }
+      console.log('[Audit] Notification email sent successfully.');
 
       const notificationData = await notificationResponse.json();
 
@@ -408,7 +410,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         eligibleGrantsCount: eligibleGrants.length
       });
     } catch (error) {
-      console.error('Error submitting audit:', error);
+      console.error('[Audit] Error submitting audit:', error);
       res.status(500).json({
         error: "Internal server error"
       });
