@@ -6,7 +6,7 @@ export default function CookiePolicy() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       {/* Header */}
       <header className="border-b border-border pt-40">
         <div className="container mx-auto px-4 py-6">
@@ -124,7 +124,7 @@ export default function CookiePolicy() {
 
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">5. Session vs. Persistent Cookies</h2>
-            
+
             <h3 className="text-xl font-semibold mb-3">5.1 Session Cookies</h3>
             <p>
               Session cookies are temporary cookies that expire when you close your browser. They help us remember your actions during a single browsing session.
@@ -238,7 +238,7 @@ export default function CookiePolicy() {
             </p>
             <div className="bg-muted p-6 rounded-lg mt-4">
               <p className="font-semibold">KPI Digital</p>
-              <p>Email: louis@kpidigital.com.au</p>
+              <p>Contact KPI Digital via our website contact form.</p>
               <p>Website: kpidigital.com.au</p>
             </div>
           </section>

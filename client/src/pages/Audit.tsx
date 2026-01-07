@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Link, useLocation } from "wouter";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
@@ -907,7 +908,7 @@ function ResultsStep({ grants, savings, formData }: ResultsStepProps) {
           <h3 className="text-xl font-bold mb-2">No Grants Available</h3>
           <p className="text-muted-foreground">
             Based on your current business profile, you don't meet the criteria for these specific grants.
-            However, there may be other opportunities — contact louis@kpidigital.com.au to discuss your options.
+            However, there may be other opportunities — contact our team to discuss your options.
           </p>
         </Card>
       ) : (
@@ -957,7 +958,7 @@ function ResultsStep({ grants, savings, formData }: ResultsStepProps) {
           </li>
           <li className="flex gap-3">
             <CheckCircle2 className="w-5 h-5 text-black flex-shrink-0 mt-0.5" />
-            <span>Questions? Email <a href="mailto:louis@kpidigital.com.au" className="text-black font-semibold underline">louis@kpidigital.com.au</a></span>
+            <span>Questions? <Link href="/contact"><a className="text-black font-semibold underline">Contact Our Team</a></Link></span>
           </li>
         </ul>
       </Card>

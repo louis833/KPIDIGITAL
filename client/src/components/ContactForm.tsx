@@ -90,7 +90,7 @@ export default function ContactForm() {
         } catch (error) {
             toast({
                 title: "Something went wrong",
-                description: "Please try again or contact us directly at louis@kpidigital.com.au",
+                description: "Please try again or contact us via our social channels.",
                 variant: "destructive",
             });
         } finally {
@@ -144,12 +144,7 @@ export default function ContactForm() {
                         Have a question or want to learn more about how we can help your business? We'd love to hear from you.
                     </p>
 
-                    {/* Contact info */}
                     <div className="flex items-center justify-center text-sm text-muted-foreground">
-                        <div className="flex items-center gap-2">
-                            <Mail className="h-4 w-4" />
-                            <span>Email: louis@kpidigital.com.au</span>
-                        </div>
                     </div>
                 </motion.div>
 

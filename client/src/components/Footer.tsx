@@ -26,13 +26,8 @@ export default function Footer({ onCTAClick }: FooterProps) {
           <div>
             <h4 className="font-semibold mb-4">Contact</h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
-              <li>Based in Launceston, Tasmania</li>
+              <li>Based in Deloraine, Tasmania</li>
               <li>Serving electricians Australia-wide</li>
-              <li>
-                <a href="mailto:louis@kpidigital.com.au" className="hover:text-primary transition-colors">
-                  louis@kpidigital.com.au
-                </a>
-              </li>
             </ul>
           </div>
 

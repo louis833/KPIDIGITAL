@@ -51,7 +51,7 @@ export default function BookingForm() {
         } catch (error) {
             toast({
                 title: "Something went wrong",
-                description: "Please try again or contact us directly at louis@kpidigital.com.au",
+                description: "Please try again or refresh the page.",
                 variant: "destructive",
             });
         }

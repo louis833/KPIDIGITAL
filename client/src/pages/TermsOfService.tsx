@@ -5,7 +5,7 @@ export default function TermsOfService() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       {/* Header */}
       <header className="border-b border-border pt-40">
         <div className="container mx-auto px-4 py-6">
@@ -80,7 +80,7 @@ export default function TermsOfService() {
 
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">5. Intellectual Property Rights</h2>
-            
+
             <h3 className="text-xl font-semibold mb-3">5.1 Our Content</h3>
             <p>
               All content on our website, including but not limited to text, graphics, logos, images, software, calculators, assessment tools, and reports, is the property of KPI Digital or our licensors and is protected by Australian and international copyright, trademark, and other intellectual property laws.
@@ -237,7 +237,7 @@ export default function TermsOfService() {
 
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">15. General Provisions</h2>
-            
+
             <h3 className="text-xl font-semibold mb-3">15.1 Entire Agreement</h3>
             <p>These Terms, along with our Privacy Policy and any service-specific agreements, constitute the entire agreement between you and KPI Digital.</p>
 
@@ -256,7 +256,7 @@ export default function TermsOfService() {
             <p>If you have any questions about these Terms, please contact us:</p>
             <div className="bg-muted p-6 rounded-lg mt-4">
               <p className="font-semibold">KPI Digital</p>
-              <p>Email: louis@kpidigital.com.au</p>
+              <p>Contact KPI Digital via our website contact form.</p>
               <p>Website: kpidigital.com.au</p>
             </div>
           </section>

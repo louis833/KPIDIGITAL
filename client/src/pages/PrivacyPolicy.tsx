@@ -6,7 +6,7 @@ export default function PrivacyPolicy() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       {/* Header */}
       <header className="border-b border-border pt-40">
         <div className="container mx-auto px-4 py-6">
@@ -35,7 +35,7 @@ export default function PrivacyPolicy() {
 
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">2. Information We Collect</h2>
-            
+
             <h3 className="text-xl font-semibold mb-3">2.1 Personal Information</h3>
             <p>We may collect personal information that you voluntarily provide to us when you:</p>
             <ul className="list-disc pl-6 mb-4">
@@ -82,7 +82,7 @@ export default function PrivacyPolicy() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">4. Information Sharing and Disclosure</h2>
             <p>We do not sell, trade, or rent your personal information to third parties. We may share your information in the following circumstances:</p>
-            
+
             <h3 className="text-xl font-semibold mb-3">4.1 Service Providers</h3>
             <p>We may share your information with trusted third-party service providers who assist us in:</p>
             <ul className="list-disc pl-6 mb-4">
@@ -126,7 +126,7 @@ export default function PrivacyPolicy() {
               <li><strong>Data Portability:</strong> Request a copy of your data in a portable format</li>
               <li><strong>Restriction:</strong> Request restriction of processing in certain circumstances</li>
             </ul>
-            <p>To exercise these rights, please contact us at louis@kpidigital.com.au</p>
+            <p>To exercise these rights, please contact us via our website contact form.</p>
           </section>
 
           <section className="mb-8">
@@ -176,7 +176,7 @@ export default function PrivacyPolicy() {
             <p>If you have any questions or concerns about this Privacy Policy or our privacy practices, please contact us:</p>
             <div className="bg-muted p-6 rounded-lg mt-4">
               <p className="font-semibold">KPI Digital</p>
-              <p>Email: louis@kpidigital.com.au</p>
+              <p>Contact KPI Digital Support via our website contact form.</p>
               <p>Website: kpidigital.com.au</p>
             </div>
           </section>

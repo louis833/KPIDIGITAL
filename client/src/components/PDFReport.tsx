@@ -679,7 +679,7 @@ export function PDFReport({
         <View style={{ alignItems: 'center' }}>
           <Image src={logoPath} style={{ width: 100, height: 100, marginBottom: 30 }} />
           <Text style={styles.coverSubtitle}>{calculatorTitle}</Text>
-          
+
           <View style={styles.coverInfo}>
             <Text style={styles.coverInfoText}>Report Generated: {date}</Text>
             <Text style={styles.coverInfoText}>Your Score: {score}/{maxScore} ({percentage}%)</Text>
@@ -695,13 +695,13 @@ export function PDFReport({
         </View>
 
         <Text style={styles.sectionTitle}>Table of Contents</Text>
-        
+
         <View style={{ marginTop: 20 }}>
           <View style={styles.tocItem}>
             <Text style={styles.tocTitle}>Executive Summary</Text>
             <Text style={styles.tocPage}>3</Text>
           </View>
-          
+
           <View style={styles.tocItem}>
             <Text style={styles.tocTitle}>Your Assessment Results</Text>
             <Text style={styles.tocPage}>3</Text>
@@ -740,7 +740,7 @@ export function PDFReport({
         </View>
 
         <Text style={styles.sectionTitle}>Executive Summary</Text>
-        
+
         <View style={styles.scoreCard}>
           <View style={styles.scoreRow}>
             <Text style={styles.scoreLabel}>Your Score:</Text>
@@ -797,13 +797,13 @@ export function PDFReport({
 
           {categoryQuestions.map((q, qIdx) => {
             const insights = getQuestionInsights(calculatorType, q.id);
-            
+
             return (
               <View key={q.id} style={styles.questionCard}>
                 <Text style={styles.questionNumber}>Question {categoryQuestions.indexOf(q) + 1}</Text>
                 <Text style={styles.questionText}>{q.question}</Text>
                 <Text style={styles.answerText}>Your Answer: {q.selectedAnswer} (Score: {q.score})</Text>
-                
+
                 <View style={styles.impactBox}>
                   <Text style={styles.impactTitle}>Business Impact:</Text>
                   <Text style={styles.impactText}>{insights.impact}</Text>
@@ -862,7 +862,7 @@ export function PDFReport({
             We've helped hundreds of trades businesses achieve clarity, build systems, and unlock sustainable growth.
           </Text>
           <Text style={[styles.ctaText, { marginTop: 15, fontFamily: 'Helvetica-Bold', fontSize: 12 }]}>
-            Contact Louis at louis@kpidigital.com.au
+            Contact KPI Digital
           </Text>
           <Text style={[styles.ctaText, { marginTop: 5 }]}>
             Let's discuss how we can accelerate your business transformation.
@@ -879,7 +879,7 @@ export function PDFReport({
         </View>
 
         <Text style={styles.sectionTitle}>Work With KPI Digital</Text>
-        
+
         <Text style={styles.subSectionTitle}>Why Choose KPI Digital?</Text>
         <View style={styles.bulletPoint}>
           <View style={styles.bullet} />
@@ -906,13 +906,13 @@ export function PDFReport({
 
         <Text style={styles.subSectionTitle}>What to Expect:</Text>
         <Text style={styles.text}>
-          Our engagement starts with a deep-dive analysis of your business, followed by a custom implementation roadmap. 
+          Our engagement starts with a deep-dive analysis of your business, followed by a custom implementation roadmap.
           We work alongside you to build and optimize systems, ensuring sustainable results long after our engagement.
         </Text>
 
         <Text style={styles.subSectionTitle}>Next Steps:</Text>
         <Text style={styles.text}>
-          1. Email Louis at <Text style={[styles.boldText, { color: BLACK }]}>louis@kpidigital.com.au</Text> with this report
+          1. Reply to your assessment email with this report
         </Text>
         <Text style={styles.text}>
           2. Schedule a complimentary strategy session to discuss your specific situation
