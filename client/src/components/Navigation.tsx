@@ -40,6 +40,11 @@ export default function Navigation({ onCTAClick }: NavigationProps) {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
+            <Link href="/digital-foundations">
+              <a className="text-sm font-medium text-foreground hover:text-primary transition-colors" onClick={handleNavClick}>
+                Digital Foundations
+              </a>
+            </Link>
             <Link href="/audit">
               <a className="text-sm font-medium text-foreground hover:text-primary transition-colors" onClick={handleNavClick}>
                 Free Grant Audit
@@ -76,6 +81,11 @@ export default function Navigation({ onCTAClick }: NavigationProps) {
             className="md:hidden bg-background border-b"
           >
             <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
+              <Link href="/digital-foundations">
+                <a className="text-sm font-medium text-foreground hover:text-primary transition-colors py-2" onClick={handleNavClick}>
+                  Digital Foundations
+                </a>
+              </Link>
               <Link href="/audit">
                 <a className="text-sm font-medium text-foreground hover:text-primary transition-colors py-2" onClick={handleNavClick}>
                   Free Grant Audit

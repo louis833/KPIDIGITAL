@@ -28,6 +28,10 @@ const emailLimiter = rateLimit({
 import { handleChat } from "./chat";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  console.log('[Routes] Registering routes...');
+
+
+
   // POST endpoint for chat
   app.post("/api/chat", handleChat);
 
@@ -92,7 +96,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'KPI Digital <onboarding@resend.dev>',
+          from: 'KPI Digital <noreply@receptionist.kpidigital.com.au>',
           to: ['louis@kpidigital.com.au'],
           subject: `New Quote Request - ${escapedCompany}`,
           html: `
@@ -143,7 +147,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'KPI Digital <onboarding@resend.dev>',
+          from: 'KPI Digital <noreply@receptionist.kpidigital.com.au>',
           to: [sanitizedEmail],
           subject: 'Quote Request Received - KPI Digital',
           html: `
@@ -467,7 +471,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'KPI Digital <onboarding@resend.dev>',
+          from: 'KPI Digital <noreply@receptionist.kpidigital.com.au>',
           to: ['louis@kpidigital.com.au'],
           subject: `New Contact Form: ${escapedSubject} `,
           html: `
@@ -510,7 +514,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'KPI Digital <onboarding@resend.dev>',
+          from: 'KPI Digital <noreply@receptionist.kpidigital.com.au>',
           to: [sanitizedEmail],
           subject: 'Thank You for Contacting KPI Digital',
           html: `
@@ -622,7 +626,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'KPI Digital <onboarding@resend.dev>',
+          from: 'KPI Digital <noreply@receptionist.kpidigital.com.au>',
           to: ['louis@kpidigital.com.au'],
           subject: `New ${escapedCalculatorType} Assessment - ${escapedUserEmail} `,
           html: `
@@ -738,7 +742,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'KPI Digital <onboarding@resend.dev>',
+          from: 'KPI Digital <noreply@receptionist.kpidigital.com.au>',
           to: [sanitizedUserEmail],
           subject: `Your ${escapedCalculatorName} Results - KPI Digital`,
           html: `
@@ -780,7 +784,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'KPI Digital <onboarding@resend.dev>',
+          from: 'KPI Digital <noreply@receptionist.kpidigital.com.au>',
           to: ['louis@kpidigital.com.au'],
           subject: `New ${escapedCalculatorName} Result - ${escapedName}`,
           html: `
@@ -828,6 +832,132 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     }
   });
+
+  // POST endpoint to handle call booking requests (Book a Call)
+  app.post("/api/book-call", emailLimiter, async (req, res) => {
+    console.log('[Booking] Received booking request:', req.body);
+    try {
+      if (!process.env.RESEND_API_KEY) {
+        console.error('[Booking] RESEND_API_KEY environment variable is not set');
+        return res.status(500).json({ error: "Email service not configured" });
+      }
+
+      const { name, email, phone, businessName, challenge, industry } = req.body;
+
+      const sanitizedName = sanitizeName(name, 100);
+      const sanitizedEmail = sanitizeEmail(email);
+      const sanitizedPhone = sanitizeText(phone, 20);
+      const sanitizedBusiness = sanitizeText(businessName, 200);
+      const sanitizedNote = sanitizeText(challenge || industry || '', 1000);
+
+      if (!sanitizedName || !sanitizedEmail || !sanitizedPhone) {
+        console.warn('[Booking] Missing required fields after sanitization:', { sanitizedName, sanitizedEmail, sanitizedPhone });
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      const escapedName = escapeHtml(sanitizedName);
+      const escapedEmail = escapeHtml(sanitizedEmail);
+      const escapedPhone = escapeHtml(sanitizedPhone);
+      const escapedBusiness = escapeHtml(sanitizedBusiness);
+      const escapedNote = escapeHtml(sanitizedNote);
+
+      const isOpIntel = !!industry;
+      const formType = isOpIntel ? 'Operational Intelligence Eligibility Check' : '15-Minute Intro Call';
+
+      const emailFrom = 'noreply@receptionist.kpidigital.com.au';
+      console.log('[Booking] Using "from" address:', emailFrom);
+
+      // Send notification email to Louis
+      console.log('[Booking] Sending notification email to Louis...');
+      const notificationResponse = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: `KPI Digital <${emailFrom}>`,
+          to: ['louis@kpidigital.com.au'],
+          subject: `New Call Request: ${formType} - ${escapedName}`,
+          html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
+              <h2 style="color: #000; margin-bottom: 24px;">New Booking Request</h2>
+              <div style="background-color: #f9fafb; padding: 20px; border-radius: 6px;">
+                <p><strong>Type:</strong> ${formType}</p>
+                <p><strong>Name:</strong> ${escapedName}</p>
+                <p><strong>Email:</strong> ${escapedEmail}</p>
+                <p><strong>Phone:</strong> ${escapedPhone}</p>
+                ${escapedBusiness ? `<p><strong>Business:</strong> ${escapedBusiness}</p>` : ''}
+                ${escapedNote ? `<p><strong>Notes:</strong> ${escapedNote}</p>` : ''}
+              </div>
+              <p style="margin-top: 24px; color: #6b7280; font-size: 14px;">
+                Submitted via KPI Digital website on ${new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney' })}.
+              </p>
+            </div>
+          `,
+        }),
+      });
+
+      if (!notificationResponse.ok) {
+        const errorData = await notificationResponse.text();
+        console.error('[Booking] Resend API error (notification):', errorData);
+        return res.status(500).json({ error: "Failed to send notification" });
+      }
+      console.log('[Booking] Notification sent successfully.');
+
+      // Send confirmation email to client
+      console.log('[Booking] Sending confirmation email to client:', sanitizedEmail);
+      const confirmationResponse = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: `KPI Digital <${emailFrom}>`,
+          to: [sanitizedEmail],
+          subject: 'We\'ve Received Your Request - KPI Digital',
+          html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 40px; border: 2px solid #000; border-radius: 12px;">
+              <h2 style="color: #000; font-size: 24px; margin-bottom: 20px;">Thanks ${escapedName}, we've received your request!</h2>
+              <p style="font-size: 16px; line-height: 1.6; color: #374151;">
+                We'll be in touch within 24 hours to schedule your ${isOpIntel ? 'eligibility check' : '15-minute intro call'}.
+              </p>
+              <div style="margin: 30px 0; padding: 20px; background-color: #f3f4f6; border-radius: 8px;">
+                <h3 style="margin-top: 0; font-size: 18px;">Summary of Request</h3>
+                <p style="margin-bottom: 4px;"><strong>Type:</strong> ${formType}</p>
+                <p style="margin-bottom: 4px;"><strong>Phone:</strong> ${escapedPhone}</p>
+                ${escapedBusiness ? `<p><strong>Business:</strong> ${escapedBusiness}</p>` : ''}
+              </div>
+              <p style="font-size: 16px; line-height: 1.6; color: #374151;">
+                In the meantime, if you have any urgent questions, feel free to reply to this email or contact Louis directly at <strong>louis@kpidigital.com.au</strong>.
+              </p>
+              <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">
+                Best regards,<br/>
+                <strong>The KPI Digital Team</strong>
+              </div>
+            </div>
+          `,
+        }),
+      });
+
+      if (!confirmationResponse.ok) {
+        const errorData = await confirmationResponse.text();
+        console.error('[Booking] Resend API error (confirmation):', errorData);
+        // We don't fail the whole request here but it's worth knowing
+      } else {
+        console.log('[Booking] Confirmation sent successfully.');
+      }
+
+      res.json({ success: true, message: "Booking request received" });
+    } catch (error) {
+      console.error('[Booking] CRITICAL ERROR in /api/book-call:', error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // Temporary test endpoint to verify email delivery
+
 
   // GET endpoint to retrieve quiz results by ID
   app.get("/api/quiz-results/:id", async (req, res) => {

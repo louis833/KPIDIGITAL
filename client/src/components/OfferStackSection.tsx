@@ -123,7 +123,10 @@ export default function OfferStackSection() {
                                     $0
                                 </div>
                                 <div className="text-sm font-medium text-muted-foreground bg-primary/10 px-4 py-1 rounded-full mt-2">
-                                    Then just $50/day for your AI Executive Assistant
+                                    Then just $50/day* for your AI Executive Assistant
+                                </div>
+                                <div className="text-xs text-muted-foreground mt-2 opacity-70">
+                                    * $50/day with free set up is based on 12 month contract.
                                 </div>
                             </div>
                         </div>

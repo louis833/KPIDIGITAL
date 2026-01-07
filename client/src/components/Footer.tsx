@@ -55,7 +55,6 @@ export default function Footer({ onCTAClick }: FooterProps) {
 
         <div className="border-t pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} KPI Digital. All rights reserved.</p>
-          <p>ABN: [Your ABN]</p>
         </div>
       </div>
     </footer>

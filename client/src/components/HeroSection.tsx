@@ -114,9 +114,10 @@ export default function HeroSection({ onCTAClick }: HeroSectionProps) {
             variants={itemVariants}
             className="text-sm text-muted-foreground font-medium"
           >
-            <p className="mb-2">From just <span className="text-primary font-bold">$50/day</span> · Free setup</p>
+            <p className="mb-2">From just <span className="text-primary font-bold">$50/day*</span> · Free setup</p>
             <p className="text-lg font-semibold text-foreground">Built by People Who Get It</p>
             <p className="text-sm text-muted-foreground mt-1">Trade experience. Not tech hype.</p>
+            <p className="text-xs text-muted-foreground mt-4 opacity-70">* $50/day with free set up is based on 12 month contract.</p>
           </motion.div>
         </motion.div>
       </div>

@@ -97,7 +97,7 @@ async function sendSummaryEmail(summary: string, userName: string, userEmail: st
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                from: 'KPI Digital Bot <onboarding@resend.dev>',
+                from: 'KPI Digital Bot <noreply@receptionist.kpidigital.com.au>',
                 to: ['louis@kpidigital.com.au'],
                 subject: `Chat Summary - ${userName}`,
                 html: `

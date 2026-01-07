@@ -13,7 +13,6 @@ export default function PricingSection({ onCTAClick }: PricingSectionProps) {
         "Every lead qualified",
         "Every tyre-kicker filtered",
         "Setup included free ($11,001 value)",
-        "Cancel anytime",
     ];
 
     return (
@@ -38,7 +37,7 @@ export default function PricingSection({ onCTAClick }: PricingSectionProps) {
                         className="bg-background rounded-3xl p-8 md:p-12 border-2 border-primary/20 shadow-xl"
                     >
                         <div className="mb-8">
-                            <div className="text-6xl md:text-8xl font-extrabold text-primary mb-2">$50</div>
+                            <div className="text-6xl md:text-8xl font-extrabold text-primary mb-2">$50<span className="text-4xl align-top">*</span></div>
                             <div className="text-2xl text-muted-foreground">/day</div>
                         </div>
 
@@ -59,7 +58,7 @@ export default function PricingSection({ onCTAClick }: PricingSectionProps) {
                             </p>
                             <p>
                                 <span className="font-medium">Your AI Executive Assistant:</span>{" "}
-                                <span className="text-primary font-bold">$50/day (and it never sleeps)</span>
+                                <span className="text-primary font-bold">$50/day* (and it never sleeps)</span>
                             </p>
                         </div>
 
@@ -68,13 +67,13 @@ export default function PricingSection({ onCTAClick }: PricingSectionProps) {
                             className="px-8 py-6 text-lg font-bold"
                             onClick={onCTAClick}
                         >
-                            Get Started for $50/Day
+                            Get Started for $50/Day*
                             <ArrowRight className="ml-2 h-5 w-5" />
                         </Button>
 
                         {/* Guarantee */}
-                        <p className="mt-6 text-sm text-muted-foreground">
-                            Cancel anytime. We keep customers by getting results, not contracts.
+                        <p className="mt-6 text-xs text-muted-foreground">
+                            * $50/day with free set up is based on 12 month contract.
                         </p>
                     </motion.div>
                 </div>

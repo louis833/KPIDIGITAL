@@ -1,20 +1,14 @@
 import { Helmet } from "react-helmet";
-import HeroSection from "@/components/HeroSection";
-import PainPointsSection from "@/components/PainPointsSection";
-import SolutionSection from "@/components/SolutionSection";
-import ProcessSection from "@/components/ProcessSection";
-import OfferStackSection from "@/components/OfferStackSection";
-import FounderStorySection from "@/components/FounderStorySection";
-import FAQSection from "@/components/FAQSection";
-import FinalCTASection from "@/components/FinalCTASection";
-import BookingForm from "@/components/BookingForm";
+import LandingHero from "@/components/LandingHero";
+import JourneySection from "@/components/JourneySection";
+import GrantsSection from "@/components/GrantsSection";
+import ResultsSection from "@/components/ResultsSection";
+import OpIntelCTA from "@/components/OpIntelCTA";
+import OpIntelBookingForm from "@/components/OpIntelBookingForm";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import ScrollIndicator from "@/components/ScrollIndicator";
 import ChatWidget from "@/components/ChatWidget";
-import ControlSection from "@/components/ControlSection";
-import PricingSection from "@/components/PricingSection";
-import MobileStickyCTA from "@/components/MobileStickyCTA";
 
 export default function Home() {
   const scrollToBookingForm = () => {
@@ -27,10 +21,10 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <title>AI Executive Assistant for Electricians | Stop Missing Jobs | KPI Digital</title>
+        <title>KPI Digital | Operational Intelligence & Energy Savings for Tasmanian Businesses</title>
         <meta
           name="description"
-          content="Your AI Executive Assistant answers every call, qualifies leads, and books jobs while you're on the tools. Just $50/day."
+          content="Independent energy audits, net zero roadmaps, and AI automation to slash power bills for Tasmanian SMBs. Start with a grant-funded audit."
         />
       </Helmet>
 
@@ -38,23 +32,17 @@ export default function Home() {
         <Navigation onCTAClick={scrollToBookingForm} />
 
         <main className="space-y-0 pb-0">
-          <HeroSection onCTAClick={scrollToBookingForm} />
-          <PainPointsSection />
-          <SolutionSection />
-          <ControlSection />
-          <OfferStackSection />
-          <PricingSection onCTAClick={scrollToBookingForm} />
-          <ProcessSection onCTAClick={scrollToBookingForm} />
-          <FounderStorySection />
-          <FAQSection />
-          <FinalCTASection onCTAClick={scrollToBookingForm} />
-          <BookingForm />
+          <LandingHero onCTAClick={scrollToBookingForm} />
+          <JourneySection />
+          <GrantsSection onCTAClick={scrollToBookingForm} />
+          <ResultsSection onCTAClick={scrollToBookingForm} />
+          <OpIntelCTA onCTAClick={scrollToBookingForm} />
+          <OpIntelBookingForm />
         </main>
 
         <Footer onCTAClick={scrollToBookingForm} />
         <ScrollIndicator />
         <ChatWidget />
-        <MobileStickyCTA onCTAClick={scrollToBookingForm} />
       </div>
     </>
   );

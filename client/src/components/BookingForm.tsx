@@ -12,6 +12,7 @@ import { Clock, MessageSquare, CheckCircle, Zap, Shield } from "lucide-react";
 
 const bookingSchema = z.object({
     name: z.string().min(2, "Name is required"),
+    email: z.string().email("Valid email is required"),
     phone: z.string().min(8, "Valid phone number is required"),
     businessName: z.string().optional(),
     challenge: z.string().optional(),
@@ -25,6 +26,7 @@ export default function BookingForm() {
         resolver: zodResolver(bookingSchema),
         defaultValues: {
             name: "",
+            email: "",
             phone: "",
             businessName: "",
             challenge: "",
@@ -32,12 +34,27 @@ export default function BookingForm() {
     });
 
     const onSubmit = async (data: BookingFormValues) => {
-        console.log("Form submitted:", data);
-        toast({
-            title: "Request Received",
-            description: "We'll be in touch shortly to schedule your free setup call.",
-        });
-        form.reset();
+        try {
+            const response = await fetch('/api/book-call', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+
+            if (!response.ok) throw new Error('Failed to submit');
+
+            toast({
+                title: "Request Received",
+                description: "We'll be in touch shortly to schedule your free setup call. Check your email for confirmation.",
+            });
+            form.reset();
+        } catch (error) {
+            toast({
+                title: "Something went wrong",
+                description: "Please try again or contact us directly at louis@kpidigital.com.au",
+                variant: "destructive",
+            });
+        }
     };
 
     const whatHappens = [
@@ -92,6 +109,20 @@ export default function BookingForm() {
                                                 <FormLabel>Name</FormLabel>
                                                 <FormControl>
                                                     <Input placeholder="Your name" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="email"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Email Address</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="your@email.com" type="email" {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
