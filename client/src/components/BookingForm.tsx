@@ -45,7 +45,7 @@ export default function BookingForm() {
 
             toast({
                 title: "Request Received",
-                description: "We'll be in touch shortly to schedule your free setup call. Check your email for confirmation.",
+                description: "We'll be in touch shortly to schedule your operational audit. Check your email for confirmation.",
             });
             form.reset();
         } catch (error) {
@@ -58,10 +58,10 @@ export default function BookingForm() {
     };
 
     const whatHappens = [
-        { icon: MessageSquare, text: "We'll have a quick 15-minute chat to understand your business" },
-        { icon: Zap, text: "You'll see exactly how the AI Executive Assistant would handle your calls" },
-        { icon: CheckCircle, text: "We'll answer any questions — no pressure, no hard sell" },
-        { icon: Clock, text: "If it's a fit, we'll get you set up within 48 hours" },
+        { icon: MessageSquare, text: "We analyze your current operational setup" },
+        { icon: Zap, text: "We identify specific opportunities for automation" },
+        { icon: CheckCircle, text: "You get a clear roadmap for improved efficiency" },
+        { icon: Clock, text: "Implementation plan delivered within 48 hours" },
     ];
 
     return (
@@ -75,14 +75,29 @@ export default function BookingForm() {
                         viewport={{ once: true }}
                         className="mb-12"
                     >
-                        <h3 className="text-2xl font-bold mb-6 text-center">What Happens When You Book</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {whatHappens.map((item, index) => (
-                                <div key={index} className="flex items-start gap-3 p-4 bg-muted/30 rounded-lg">
-                                    <item.icon className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                                    <span className="text-sm">{item.text}</span>
+                        <h3 className="text-2xl font-bold mb-6 text-center">What Happens When You Audit</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left mb-12">
+                            <div className="space-y-3">
+                                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto md:mx-0">
+                                    <span className="font-bold text-primary text-xl">1</span>
                                 </div>
-                            ))}
+                                <h4 className="font-bold">Discovery Session</h4>
+                                <p className="text-sm text-muted-foreground">We unpack your current friction points and business goals.</p>
+                            </div>
+                            <div className="space-y-3">
+                                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto md:mx-0">
+                                    <span className="font-bold text-primary text-xl">2</span>
+                                </div>
+                                <h4 className="font-bold">The Audit Map</h4>
+                                <p className="text-sm text-muted-foreground">We build a 30-Point visual roadmap of your operations.</p>
+                            </div>
+                            <div className="space-y-3">
+                                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto md:mx-0">
+                                    <span className="font-bold text-primary text-xl">3</span>
+                                </div>
+                                <h4 className="font-bold">The Strategy</h4>
+                                <p className="text-sm text-muted-foreground">You get a fixed-price proposal to implement the solution.</p>
+                            </div>
                         </div>
                     </motion.div>
 
@@ -93,9 +108,9 @@ export default function BookingForm() {
                     >
                         <Card className="p-8 border-2 border-primary/10 shadow-lg">
                             <div className="text-center mb-8">
-                                <h2 className="text-2xl font-bold mb-2">Book Your Free 15-Minute Call</h2>
+                                <h2 className="text-2xl font-bold mb-2">Book Your Operational Audit</h2>
                                 <p className="text-muted-foreground">
-                                    No pressure. No hard sell. Just a quick chat to see if this is right for your business.
+                                    Discover where your business is bleeding money and how to fix it.
                                 </p>
                             </div>
 
@@ -148,9 +163,9 @@ export default function BookingForm() {
                                         name="businessName"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Business Name (Optional)</FormLabel>
+                                                <FormLabel>Business Name</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="Your electrical business" {...field} />
+                                                    <Input placeholder="Your business name" {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -162,10 +177,10 @@ export default function BookingForm() {
                                         name="challenge"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>What's your biggest challenge with enquiries right now? (Optional)</FormLabel>
+                                                <FormLabel>What's your biggest operational headache? (Optional)</FormLabel>
                                                 <FormControl>
                                                     <Textarea
-                                                        placeholder="e.g. Missing calls while on the roof..."
+                                                        placeholder="e.g. Manual data entry taking too long..."
                                                         className="resize-none"
                                                         {...field}
                                                     />
@@ -176,7 +191,7 @@ export default function BookingForm() {
                                     />
 
                                     <Button type="submit" className="w-full text-lg py-6 font-bold">
-                                        Book Your Free 15-Minute Call
+                                        Book Your Audit
                                     </Button>
                                 </form>
                             </Form>
@@ -185,7 +200,7 @@ export default function BookingForm() {
                             <div className="mt-6 pt-6 border-t border-border">
                                 <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                                     <Shield className="w-4 h-4 text-green-600" />
-                                    <span>Just $50/day · Free setup included · Cancel anytime</span>
+                                    <span>Confidential analysis · No obligation · Expert insights</span>
                                 </div>
                             </div>
                         </Card>

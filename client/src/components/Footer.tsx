@@ -16,7 +16,7 @@ export default function Footer({ onCTAClick }: FooterProps) {
               </a>
             </Link>
             <p className="text-muted-foreground mb-6 max-w-sm">
-              Helping electricians capture every lead without hiring staff.
+              Empowering Tasmanian businesses with data-driven insights and operational intelligence.
             </p>
             <div className="flex gap-4">
               {/* Social links placeholder */}
@@ -27,7 +27,7 @@ export default function Footer({ onCTAClick }: FooterProps) {
             <h4 className="font-semibold mb-4">Contact</h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li>Based in Deloraine, Tasmania</li>
-              <li>Serving electricians Australia-wide</li>
+              <li>Serving businesses primarily in Tasmania</li>
             </ul>
           </div>
 

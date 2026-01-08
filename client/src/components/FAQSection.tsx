@@ -8,39 +8,31 @@ import {
 export default function FAQSection() {
     const faqs = [
         {
-            question: "How much does it cost?",
-            answer: "Your AI Executive Assistant costs $50/day. That's less than a single missed job — and most sparkies tell us they make it back before lunchtime. Setup is free.",
+            question: "How does the engagement structure work?",
+            answer: "We start with the Operational Audit. This is a low-risk, standalone engagement where we map your entire business effectively giving you a blueprint for scale. From there, we present a Custom Proposal for implementation. You can hire us to build it, or take the roadmap and do it yourself.",
             defaultOpen: true,
         },
         {
-            question: "What if the AI makes a mistake or says something wrong?",
-            answer: "You stay in control. The AI only says what you've approved. For anything outside its training, it takes a message and lets you handle it. Plus, you can review and adjust responses anytime.",
+            question: "Is this just software?",
+            answer: "No. Software is a tool, not a solution. We provide 'Operational Intelligence'—which combines strategy, process re-engineering, and automation. We don't just give you a login; we build the machine that runs your business.",
             defaultOpen: true,
         },
         {
-            question: "How long does it take to get set up?",
-            answer: "Most businesses are up and running within 48 hours. We handle the technical setup — you just need to tell us about your business.",
+            question: "Do I need to change my existing software?",
+            answer: "Rarely. We specialize in integrating the tools you already use (Xero, HubSpot, ServiceM8, simPRO, Jobber, etc.). We make your disparate systems talk to each other so you stop acting as the manual bridge between them.",
             defaultOpen: true,
         },
         {
-            question: "Do I need to be tech-savvy?",
-            answer: "Not at all. If you can use a smartphone, you can use this. We set everything up for you, and you manage it through a simple app.",
+            question: "Who is this best suited for?",
+            answer: "We work best with Tasmanian businesses tackling the 'scale ceiling'—typically teams of 5–50 staff where the owner is still too involved in day-to-day fires. If you are drowning in spreadsheets or admin, this is for you.",
         },
         {
-            question: "What if I want to cancel?",
-            answer: "Cancel anytime. We keep customers by getting results, not trapping them.",
+            question: "What exactly do I get in the Audit?",
+            answer: "You receive a comprehensive 'Operational Roadmap'. This includes a visual map of your current data flow, a 'Red Flag' report on bottlenecks, and a detailed technical strategy for automation. It is a physical asset you keep.",
         },
         {
-            question: "Will customers know they're talking to an AI?",
-            answer: "The AI introduces itself as your assistant, so customers know they're speaking with AI. But here's the thing — they don't care, as long as they get a fast, helpful response. Call us to speak with our own AI receptionist and judge for yourself.",
-        },
-        {
-            question: "What happens to after-hours calls?",
-            answer: "The AI handles them 24/7. Urgent calls can be flagged for immediate notification. Everything else waits for you in the morning, fully summarised and ready to action.",
-        },
-        {
-            question: "Is $50/day worth it?",
-            answer: "One missed $600 job pays for nearly two weeks of service. Most sparkies miss at least a few calls per week — the AI pays for itself many times over.",
+            question: "How long until I see results?",
+            answer: "The Audit is delivered within 3-5 days of our initial discovery session. For implementation, most clients see 10+ hours/week saved within the first 14 days of go-live.",
         },
     ];
 
@@ -53,7 +45,10 @@ export default function FAQSection() {
         <section className="py-24 bg-background">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-6">Questions You Might Have</h2>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-6">Common Questions</h2>
+                    <p className="text-muted-foreground max-w-2xl mx-auto">
+                        Clarifying the path from chaos to clarity.
+                    </p>
                 </div>
 
                 <div className="max-w-3xl mx-auto">

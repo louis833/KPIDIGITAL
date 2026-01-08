@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Hammer, Zap, CheckCircle2 } from "lucide-react";
+import { Search, Map, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ProcessSectionProps {
@@ -9,25 +9,25 @@ interface ProcessSectionProps {
 export default function ProcessSection({ onCTAClick }: ProcessSectionProps) {
   const steps = [
     {
-      icon: Hammer,
-      step: "Step 1",
-      title: "We Build Your Digital Presence",
-      subtitle: "Free Setup · 3-5 Days",
-      description: "We create your professional website, optimise your Google Business Profile, and set up your social media — all built to feed enquiries into one system. You don't pay a cent for setup.",
+      icon: Search,
+      step: "Phase 1",
+      title: "The Vision Audit",
+      subtitle: "Analysis & Discovery",
+      description: "We don't guess. We map. You receive a standalone 30-Point Operational Roadmap identifying every bottleneck, leak, and inefficiency in your current stack. Yours to keep.",
     },
     {
-      icon: Zap,
-      step: "Step 2",
-      title: "AI Goes Live",
-      subtitle: "Day 5 Onwards",
-      description: "Your AI Executive Assistant starts handling every call, chat, and message. It responds instantly, gathers job details, qualifies leads against your criteria, and logs everything in your dashboard.",
+      icon: Map,
+      step: "Phase 2",
+      title: "The Strategy",
+      subtitle: "Solution Design",
+      description: "We design a custom roadmap. This isn't generic advice—it's a detailed technical plan showing how we'll integrate your systems and automate your workflows.",
     },
     {
-      icon: CheckCircle2,
-      step: "Step 3",
-      title: "You Review and Approve",
-      subtitle: "10 Minutes a Day",
-      description: "Each evening, open Director Mode. See your leads, review pre-filled quotes, approve or tweak, and check tomorrow's schedule. The AI handles the chaos — you make the decisions.",
+      icon: Rocket,
+      step: "Phase 3",
+      title: "Implementation",
+      subtitle: "Build & Launch",
+      description: "We build your dashboards, configure your automations, and train your team. You go live with a fully optimized business operating system.",
     },
   ];
 
@@ -35,7 +35,7 @@ export default function ProcessSection({ onCTAClick }: ProcessSectionProps) {
     <section className="py-24 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">From Setup to Jobs in One Week</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Your Path to Operational Excellence</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
@@ -69,7 +69,7 @@ export default function ProcessSection({ onCTAClick }: ProcessSectionProps) {
             className="px-8 py-6 text-lg font-semibold hover-elevate"
             onClick={onCTAClick}
           >
-            Stop Missing Jobs — Book a Demo
+            Book Your Vision Audit
           </Button>
         </div>
       </div>

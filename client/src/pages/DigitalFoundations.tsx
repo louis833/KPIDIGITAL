@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet";
 import HeroSection from "@/components/HeroSection";
 import PainPointsSection from "@/components/PainPointsSection";
 import SolutionSection from "@/components/SolutionSection";
+import AutomationExamplesSection from "@/components/AutomationExamplesSection";
 import ProcessSection from "@/components/ProcessSection";
 import OfferStackSection from "@/components/OfferStackSection";
 import FounderStorySection from "@/components/FounderStorySection";
@@ -12,8 +13,6 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import ScrollIndicator from "@/components/ScrollIndicator";
 import ChatWidget from "@/components/ChatWidget";
-import ControlSection from "@/components/ControlSection";
-import PricingSection from "@/components/PricingSection";
 import MobileStickyCTA from "@/components/MobileStickyCTA";
 
 export default function DigitalFoundations() {
@@ -27,10 +26,10 @@ export default function DigitalFoundations() {
   return (
     <>
       <Helmet>
-        <title>AI Executive Assistant for Electricians | Stop Missing Jobs | KPI Digital</title>
+        <title>Operational Intelligence for Tasmanian Businesses | KPI Digital</title>
         <meta
           name="description"
-          content="Your AI Executive Assistant answers every call, qualifies leads, and books jobs while you're on the tools. Just $50/day."
+          content="Transform your business with operational intelligence. Automate workflows, integrate data, and make smarter decisions with KPI Digital."
         />
       </Helmet>
 
@@ -41,10 +40,9 @@ export default function DigitalFoundations() {
           <HeroSection onCTAClick={scrollToBookingForm} />
           <PainPointsSection />
           <SolutionSection />
-          <ControlSection />
-          <OfferStackSection />
-          <PricingSection onCTAClick={scrollToBookingForm} />
+          <AutomationExamplesSection />
           <ProcessSection onCTAClick={scrollToBookingForm} />
+          <OfferStackSection />
           <FounderStorySection />
           <FAQSection />
           <FinalCTASection onCTAClick={scrollToBookingForm} />

@@ -18,7 +18,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/digital-foundations" component={DigitalFoundations} />
+      <Route path="/operational-intelligence" component={DigitalFoundations} />
       <Route path="/ai-receptionist" component={DigitalFoundations} />
       <Route path="/how-it-works" component={HowItWorks} />
       <Route path="/pricing" component={Pricing} />

@@ -1,37 +1,37 @@
 import { motion } from "framer-motion";
-import { Phone, MessageSquare, Facebook, MapPin, Smartphone, LayoutDashboard } from "lucide-react";
+import { Database, BarChart3, Workflow, ShieldCheck, Zap, LineChart } from "lucide-react";
 
 export default function SolutionSection() {
   const features = [
     {
-      icon: Phone,
-      title: "Phone Calls",
-      description: "Answered within two rings, day or night. The AI greets callers with your business name, gathers job details, qualifies the lead, and books a callback or appointment.",
+      icon: Database,
+      title: "Data Integration",
+      description: "We connect your dispersed systems—CRM, accounting, inventory—into a single, unified data map. No more copying and pasting.",
     },
     {
-      icon: MessageSquare,
-      title: "Website Chat",
-      description: "Instant responses to website visitors. No more \"leave a message and we'll get back to you.\" The AI engages them while they're keen.",
+      icon: BarChart3,
+      title: "Real-Time Visualization",
+      description: "See your business pulse instantly. Custom dashboards that show you exactly what's happening, when it's happening.",
     },
     {
-      icon: Facebook,
-      title: "Social Media Messages",
-      description: "Facebook and Instagram DMs handled automatically. Same response quality whether it's 2pm or 2am.",
+      icon: Workflow,
+      title: "Automated Workflows",
+      description: "Replace manual, repetitive tasks with intelligent automation. From efficient invoicing to automated customer follow-ups.",
     },
     {
-      icon: MapPin,
-      title: "Google Business Messages",
-      description: "When someone finds you on Google and hits \"Message,\" the AI responds immediately and captures the lead.",
+      icon: LineChart,
+      title: "Predictive Analytics",
+      description: "Don't just look back—look forward. Use data to forecast trends, demand, and potential issues before they hit.",
     },
     {
-      icon: Smartphone,
-      title: "SMS Enquiries",
-      description: "Text messages answered and qualified, just like phone calls.",
+      icon: Zap,
+      title: "Operational Speed",
+      description: "Accelerate your decision-making loop. With instant access to accurate data, you move faster than the competition.",
     },
     {
-      icon: LayoutDashboard,
-      title: "Director Mode",
-      description: "End of day snapshot of all the key workings of the business. See exactly what happened without getting bogged down in the details.",
+      icon: ShieldCheck,
+      title: "Compliance & Security",
+      description: "Ensure your operations meet industry standards with automated compliance checks and secure data handling.",
     },
   ];
 
@@ -39,9 +39,9 @@ export default function SolutionSection() {
     <section className="py-24 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">Your AI Executive Assistant, Working 24/7</h2>
+          <h2 className="text-3xl md:text-5xl font-bold mb-6">Operational Intelligence: Your Competitive Edge</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Trained on YOUR business. Your service areas. Your pricing. Your way of talking to customers.
+            We don't just give you a dashboard; we give you clarity, control, and the power to scale with confidence.
           </p>
         </div>
 
@@ -69,7 +69,7 @@ export default function SolutionSection() {
         {/* Note about customisation */}
         <div className="max-w-3xl mx-auto mt-12 text-center">
           <p className="text-muted-foreground">
-            And if something's outside its scope? It takes a message and lets you handle it personally.
+            Tailored specifically for the unique challenges of the Tasmanian market.
           </p>
         </div>
       </div>

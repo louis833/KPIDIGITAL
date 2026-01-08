@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { useState } from "react";
 
 interface HeroSectionProps {
   onCTAClick?: () => void;
@@ -33,10 +33,8 @@ export default function HeroSection({ onCTAClick }: HeroSectionProps) {
   };
 
   const handleCTAClick = () => {
-    console.log("Book Strategy Call clicked");
     onCTAClick?.();
   };
-
 
   return (
     <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/20 overflow-hidden">
@@ -73,7 +71,7 @@ export default function HeroSection({ onCTAClick }: HeroSectionProps) {
           {/* Main headline with staggered animation */}
           <motion.h1
             variants={itemVariants}
-            className="text-4xl md:text-8xl lg:text-9xl font-extrabold text-foreground mb-8 tracking-tight leading-none"
+            className="text-4xl md:text-7xl lg:text-8xl font-extrabold text-foreground mb-8 tracking-tight leading-none"
           >
             <motion.span
               className="block"
@@ -81,7 +79,7 @@ export default function HeroSection({ onCTAClick }: HeroSectionProps) {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
-              STOP MISSING JOBS.
+              OPERATIONAL INTELLIGENCE.
             </motion.span>
           </motion.h1>
 
@@ -90,23 +88,44 @@ export default function HeroSection({ onCTAClick }: HeroSectionProps) {
             variants={itemVariants}
             className="text-xl md:text-3xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed font-medium"
           >
-            Your <span className="text-primary font-bold">AI Executive Assistant</span> answers every call, books jobs, and filters time-wasters — so you can focus on the work.
+            Empowering <span className="text-primary font-bold">Tasmanian Businesses</span> with data-driven insights, automated workflows, and smarter decision-making.
           </motion.p>
 
           {/* CTA Buttons */}
           <motion.div
             variants={itemVariants}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
+            className="mb-16" // Keep mb-16 on the motion.div, or adjust as needed
           >
-            <Button
-              size="lg"
-              className="px-8 py-6 text-xl md:px-12 md:py-8 md:text-2xl font-bold hover-elevate active-elevate-2 group transition-all duration-300 shadow-xl shadow-primary/20"
-              onClick={handleCTAClick}
-              data-testid="button-book-call"
-            >
-              See How It Works
-              <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform duration-300" />
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <Button
+                size="lg"
+                className="px-8 py-6 text-lg font-bold hover-elevate shadow-xl shadow-primary/20"
+                onClick={onCTAClick}
+              >
+                Get Your Operational Audit
+              </Button>
+              <Link href="#process">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="px-8 py-6 text-lg font-semibold bg-background/50 backdrop-blur-sm border-2 hover:bg-background/80"
+                >
+                  See How It Works
+                </Button>
+              </Link>
+            </div>
+
+            {/* Qualification Filter */}
+            <div className="inline-flex flex-wrap justify-center gap-x-8 gap-y-3 p-4 bg-muted/40 backdrop-blur-md rounded-2xl border border-border/50 text-sm font-medium text-muted-foreground/90">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <span>Best for Tasmanian Teams (5–50 Staff)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <span>Currently Hitting an "Operational Ceiling"</span>
+              </div>
+            </div>
           </motion.div>
 
           {/* Trust indicators */}
@@ -114,14 +133,11 @@ export default function HeroSection({ onCTAClick }: HeroSectionProps) {
             variants={itemVariants}
             className="text-sm text-muted-foreground font-medium"
           >
-            <p className="mb-2">From just <span className="text-primary font-bold">$50/day*</span> · Free setup</p>
-            <p className="text-lg font-semibold text-foreground">Built by People Who Get It</p>
-            <p className="text-sm text-muted-foreground mt-1">Trade experience. Not tech hype.</p>
-            <p className="text-xs text-muted-foreground mt-4 opacity-70">* $50/day with free set up is based on 12 month contract.</p>
+            <p className="mb-2">Local expertise. Global standards.</p>
+            <p className="text-lg font-semibold text-foreground">Built for Tasmania.</p>
           </motion.div>
         </motion.div>
       </div>
-
     </section>
   );
 }
